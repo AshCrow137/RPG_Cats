@@ -47,6 +47,5 @@ MonoBehaviour:
   damage: 1
   cooldown: 3
   cost: 7
-  executeTime: 0
-  abilityDistance: 0
-  DashSpeed: 20
+  executeTime: 0.3
+  abilityDistance: 6

@@ -16,6 +16,7 @@ public class CharacterScript : MonoBehaviour
     protected Movement movementScript;
 
     protected Parameters parameters;
+    protected List<CharacterScript> Enemylist = new List<CharacterScript>();
     private void Awake()
     {
 
@@ -128,5 +129,20 @@ public class CharacterScript : MonoBehaviour
     public virtual void CharacterDead()
     {
         Destroy(this.gameObject);
+    }
+    public void AddEnemyToEnemyList(CharacterScript Enemy)
+    {
+        if(Enemy == gameObject)// игнорим сами себя
+        {
+            return;
+        }
+        Enemylist.Add(Enemy);
+    }
+    public void RemoveEnemyFromEnemyList(CharacterScript Enemy)
+    {
+        if (Enemylist.Contains(Enemy))
+        {
+            Enemylist.Remove(Enemy);
+        }
     }
 }

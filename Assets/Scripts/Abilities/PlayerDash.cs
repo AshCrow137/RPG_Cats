@@ -8,8 +8,7 @@ using static Unity.VisualScripting.Member;
 public class PlayerDash : BaseAbility
 {
 
-    [SerializeField]
-    private float DashSpeed = 20.0f;
+
     private Rigidbody2D rb;
     private Movement movementScript;
     private ForwardObjectScript forwardObject;
@@ -47,15 +46,16 @@ public class PlayerDash : BaseAbility
         float rad = (forwardObject.transform.eulerAngles.z+90)*Mathf.Deg2Rad;
         
         Vector2 target = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+        float DashSpeed = abilityDistance / executeTime;
         rb.MovePosition(rb.position + target.normalized * DashSpeed * Time.fixedDeltaTime);
 
     }
 
 
-    protected override void executeAbility()
+    protected override void ExecuteAbility()
     {
         
-        base.executeAbility();
+        base.ExecuteAbility();
         
         movementScript.ChangeMovementPossibility( false );
         Dash();

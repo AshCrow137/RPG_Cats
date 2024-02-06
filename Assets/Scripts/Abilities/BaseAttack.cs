@@ -50,9 +50,9 @@ public class BaseAttack : BaseAbility
         //TODO Animations 
 
     }
-    protected override void executeAbility()
+    protected override void ExecuteAbility()
     {
-        base.executeAbility();
+        base.ExecuteAbility();
 
         
     }

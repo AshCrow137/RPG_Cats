@@ -43,14 +43,12 @@ public class ProjectileScript : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
     private void MoveToTarget()
     {
-
-        Vector2 direction = (Vector2)projectileTarget.transform.position - rb.position;
-        direction.Normalize();
-        float rotateAmount = Vector3.Cross(direction, transform.up).z;
-        rb.angularVelocity = -angleChangingSpeed * rotateAmount;
-        rb.velocity = transform.up * projectileSpeed;
+        transform.position = Vector3.MoveTowards(transform.position, projectileTarget.transform.position, projectileSpeed*Time.deltaTime);
+        Vector3 targetDirection = projectileTarget.transform.position - transform.position;
+        transform.up = targetDirection.normalized;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

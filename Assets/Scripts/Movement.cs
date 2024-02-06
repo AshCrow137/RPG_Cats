@@ -71,7 +71,7 @@ public class Movement : MonoBehaviour
     {
         target = newtarget;
 
-        print(newtarget);
+       
        
     }
 }

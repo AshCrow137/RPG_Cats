@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BaseAbility : MonoBehaviour
 {
@@ -18,104 +19,42 @@ public class BaseAbility : MonoBehaviour
     protected float abilityDistance;
     //Private
     private AbilityState abilityState;
-    private float startAbilityTime;
-    private float startCooldownTime;
+
 
     //Public
+    public static UnityEvent AbilityReadyEvent = new UnityEvent();
+    public static UnityEvent AbilityExecutingEvent = new UnityEvent();
+    public static UnityEvent AbilityFinishedEvent = new UnityEvent();
 
 
-    ////Voids
-
-    //Private
+    #region UnityMethods
     private void Start()
     {
         abilityState = AbilityState.Ready;
     }
-
-    //Protected
-    protected virtual void executeAbility()
+    protected virtual void FixedUpdate()
     {
+
 
     }
-    protected virtual void ReadyAbility()
+    #endregion
+    #region AbilityStates
+    protected virtual void ExecuteAbility()
     {
-
+        
+    }
+    protected virtual void AbilityReady()
+    {
+        abilityState = AbilityState.Ready;
+        AbilityReadyEvent.Invoke();
     }
     protected virtual void OnFinishAbility()
     {
-
+        Debug.Log($"{gameObject} ability finished");
+        AbilityFinishedEvent.Invoke();
+        StartCoroutine(AbilityCooldownTimer());
     }
-    protected void SwitchAbilityState()
-    {
-        switch (abilityState)
-        {
-
-            case AbilityState.Ready:
-                break;
-            case AbilityState.Executing:
-                //print($"try execute {this.name} in case");
-                float ctime = Time.time;
-                if (startAbilityTime + executeTime > ctime)
-                {
-                    //print($"execute {this.name}");
-                    executeAbility();
-
-
-                }
-                else
-                {
-                    //print($"start cooldown {this.name}");
-                    OnFinishAbility();
-                    abilityState = AbilityState.Cooldown;
-                    startCooldownTime = Time.time;
-                }
-                break;
-            case AbilityState.Cooldown:
-                ctime = Time.time;
-
-                if (startCooldownTime + cooldown > ctime)
-                {
-
-                    break;
-                }
-                else
-                {
-                    abilityState = AbilityState.Ready;
-                }
-
-                break;
-
-        }
-    }
-    protected virtual void FixedUpdate()
-    {
-        SwitchAbilityState();
-        
-    }
-
-    //Public
-    public virtual bool CanActavateAbility()
-    {
-        if (abilityState == AbilityState.Ready)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    
-    }
-    public float getCooldown(){ return cooldown; }
-    public int getCost() { return cost; }
-    public void changeCost(int value)
-    {
-        cost += value;
-    }
-    public void changeCooldown(float value)
-    {
-        cooldown += value;
-    }
+    #endregion
 
     public virtual void ActivateAbility(GameObject source,GameObject Target)
     {
@@ -134,13 +73,14 @@ public class BaseAbility : MonoBehaviour
         {
 
             
-            if (abilityState == AbilityState.Ready)
+            if (CanActavateAbility())
             {
                 print($"activate {this.name} with target {Target}");
                 //print($"Try to execute {this.name}");
                 activatorParams.changeEnergy(-cost);
-                abilityState = AbilityState.Executing;
-                startAbilityTime = Time.time;
+                AbilityExecutingEvent.Invoke();
+                StartCoroutine(AbilityExecuteTimer());
+                
             }
              else
             {
@@ -154,12 +94,57 @@ public class BaseAbility : MonoBehaviour
         }
 
     }
+    #region AbilityStats
+    public float getCooldown() { return cooldown; }
+    public int getCost() { return cost; }
+    public void changeCost(int value)
+    {
+        cost += value;
+    }
+    public void changeCooldown(float value)
+    {
+        cooldown += value;
+    }
+    public virtual bool CanActavateAbility()
+    {
+        if (abilityState == AbilityState.Ready)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
 
-
+    }
     public virtual GameObject GetTarget()
     {
         return this.gameObject;
     }
+    #endregion
+    #region Timers
+
+    protected IEnumerator AbilityExecuteTimer()
+    {
+        abilityState = AbilityState.Executing;
+        float t = 0;
+        while (t<=executeTime)
+        {
+            ExecuteAbility();
+            t+= Time.deltaTime; 
+            yield return null;
+        }
+
+        OnFinishAbility();
+
+    }
+    protected IEnumerator AbilityCooldownTimer()
+    {
+        abilityState = AbilityState.Cooldown;
+        yield return new WaitForSeconds(cooldown);
+        AbilityReady();
+    }
+    #endregion
     private enum AbilityState
     {
         Ready,
