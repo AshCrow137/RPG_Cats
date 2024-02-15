@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
+using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {
-    
+
     protected static Rigidbody2D rb;
     protected static Animator animator;
-    protected static ForwardObjectScript forwardObject;
+    [SerializeField]
+    protected  ForwardObjectScript forwardObject;
     protected static AnimationScript animationScript;
     protected bool canMove = true;
 
@@ -19,10 +18,13 @@ public class Movement : MonoBehaviour
     protected float speed;
 
     protected Transform target;
-    private void Awake()
+
+    public  UnityEvent OnMove = new UnityEvent();
+    public  UnityEvent OnMovementFinished = new UnityEvent();
+    protected virtual void Awake()
     {
         forwardObject = GetComponentInChildren<ForwardObjectScript>();
-        if (forwardObject== null)
+        if (forwardObject == null)
         {
             Debug.LogError($"No forward object attached to {this.name}");
         }
@@ -33,10 +35,24 @@ public class Movement : MonoBehaviour
     }
     protected virtual void FixedUpdate()
     {
-        if (canMove && target!= null) 
+        if (canMove && movement != Vector2.zero)
         {
-            transform.position = Vector3.MoveTowards(transform.position,target.position,speed* Time.deltaTime);
+            OnMove.Invoke();
+
         }
+        else
+        {
+            OnMovementFinished.Invoke();
+        }
+
+    }
+    public virtual void MoveToTarget(Transform target)
+    {
+        if (canMove && target != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        }
+
     }
     public ForwardObjectScript GetForwardObject()
     {
@@ -70,8 +86,5 @@ public class Movement : MonoBehaviour
     public void setTarget(Transform newtarget)
     {
         target = newtarget;
-
-       
-       
     }
 }

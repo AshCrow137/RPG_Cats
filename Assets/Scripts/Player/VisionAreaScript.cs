@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
@@ -10,7 +8,7 @@ public class VisionAreaScript : MonoBehaviour
     private void Start()
     {
         _characterScript = GetComponentInParent<CharacterScript>();
-        if(! _characterScript )
+        if (!_characterScript)
         {
             Debug.LogError($"{gameObject} vidion area does not attached to character!");
             return;

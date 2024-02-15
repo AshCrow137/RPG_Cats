@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AnimationScript : MonoBehaviour
@@ -11,7 +9,7 @@ public class AnimationScript : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
-    public void UpdateMovement(float horizontal,float vertical,float speed)
+    public void UpdateMovement(float horizontal, float vertical, float speed)
     {
         if (animator != null)
         {

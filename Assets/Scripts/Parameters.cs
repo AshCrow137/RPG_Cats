@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Parameters : MonoBehaviour
 {
 
-    
+
     // Health params
     [SerializeField]
     protected float health;
     [SerializeField]
     protected float maxHealth;
-    
+
     //Energy params
     [SerializeField]
-    protected float energy; 
-                          public float getEnergy() { return energy; }
+    protected float energy;
+    public float getEnergy() { return energy; }
     [SerializeField]
     protected int maxEnergy;
     [SerializeField]
@@ -35,9 +33,9 @@ public class Parameters : MonoBehaviour
         EnergyRegeneration();
     }
 
-    public float getHealth() 
+    public float getHealth()
     {
-        return health; 
+        return health;
     }
     public void ChangeHealth(float amount)
     {
@@ -47,18 +45,19 @@ public class Parameters : MonoBehaviour
             health = maxHealth;
         }
     }
-    public void changeEnergy(float amount) { 
-        energy += amount; 
-        if(energy > maxEnergy)
+    public void changeEnergy(float amount)
+    {
+        energy += amount;
+        if (energy > maxEnergy)
         {
             energy = maxEnergy;
         }
     }
     private void EnergyRegeneration()
     {
-        if (energy<maxEnergy)
+        if (energy < maxEnergy)
         {
-            changeEnergy( energyRegen*Time.deltaTime );
+            changeEnergy(energyRegen * Time.deltaTime);
 
         }
     }

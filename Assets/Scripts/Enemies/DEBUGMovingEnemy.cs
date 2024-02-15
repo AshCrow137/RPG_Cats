@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static Unity.Burst.Intrinsics.X86;
 
 public class DEBUGMovingEnemy : EnemyScript
 {
@@ -15,8 +12,8 @@ public class DEBUGMovingEnemy : EnemyScript
 
     private void Start()
     {
-        fMinX = transform.position.x-moveDistance;
-        fMaxX = transform.position.x+moveDistance;
+        fMinX = transform.position.x - moveDistance;
+        fMaxX = transform.position.x + moveDistance;
     }
 
     void Update()
@@ -28,7 +25,7 @@ public class DEBUGMovingEnemy : EnemyScript
                 // Moving Left
                 if (fEnemyX > fMinX)
                 {
-                    fEnemyX -= speed*Time.deltaTime;
+                    fEnemyX -= speed * Time.deltaTime;
                 }
                 else
                 {

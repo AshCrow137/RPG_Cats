@@ -1,14 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScript : CharacterScript
 {
     public static PlayerScript Instance { get; private set; }
-    
 
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake();
 
         if (Instance != null && Instance != this)
         {
@@ -21,59 +21,21 @@ public class PlayerScript : CharacterScript
 
     }
 
-    private void Update()
-    {
-        
-        if (movementScript.GetCurrentSpeed()<=0.01)
-        {
-            
-            BasicAttack();
-        }
-    }
 
-    public override void BasicAttack()
+    public override void BasicAttack(CharacterScript target)
     {
         if (baseAttack != null)
         {
-            if (baseAttack.CanActavateAbility()&& baseAttack.IsAttacking())
+            if (!isAttacking)
             {
-
-
-
-                attackTarget = GetPossibleEnemyList(Enemylist);
-                if (attackTarget != null)
-                {
-                    baseAttack.ActivateAbility(this.gameObject, attackTarget.gameObject);
-                    //baseAttack.ChangeIsAttacking(true);
-                }
-                else
-                {
-                    print("No valid targets!");
-                    baseAttack.ChangeIsAttacking(false);
-
-                }
-
-
+                StartCoroutine(RepeatAttack(target));
             }
-
-
-            
         }
         else
         {
             Debug.LogError($"there is no basic attack attached to {this.name}");
         }
-
     }
-    public void TryToAttack()
-    {
-        if (!baseAttack)
-        {
-            Debug.LogError($"there is no basic attack attached to {this.name}");
-            return;
-        }
-        baseAttack.ChangeIsAttacking(true);
 
-    }
 }
 

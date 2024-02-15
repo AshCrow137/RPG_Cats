@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+
 
 public class BaseAbility : MonoBehaviour
 {
@@ -14,23 +13,52 @@ public class BaseAbility : MonoBehaviour
     [SerializeField]
     protected int cost;
     [SerializeField]
+    private AbilityExecutionType abilityExecutionType;
+    [SerializeField]
     protected float executeTime;
     [SerializeField]
     protected float abilityDistance;
     //Private
     private AbilityState abilityState;
-
+    private CharacterScript abilityOwner;
 
     //Public
-    public static UnityEvent AbilityReadyEvent = new UnityEvent();
-    public static UnityEvent AbilityExecutingEvent = new UnityEvent();
-    public static UnityEvent AbilityFinishedEvent = new UnityEvent();
+    //public  UnityEvent AbilityReadyEvent = new UnityEvent();
+    //public  UnityEvent AbilityExecutingEvent = new UnityEvent();
+    //public  UnityEvent AbilityFinishedEvent = new UnityEvent();
 
 
     #region UnityMethods
     private void Start()
     {
         abilityState = AbilityState.Ready;
+        abilityOwner = GetComponentInParent<CharacterScript>();
+        if (!abilityOwner)
+        {
+            Debug.LogError($"{this.name} ability has no ability owner!");
+        }
+        else
+        {
+            Movement movement = abilityOwner.GetMovementScript();
+            if (movement != null) 
+            {
+                print(movement.ToString());
+                movement.OnMove.AddListener(OnCharacterMove);
+                movement.OnMovementFinished.AddListener(OnCharacterStopMove);
+            }
+          
+      
+
+        }
+    }
+    protected virtual void OnCharacterMove()
+    {
+        
+
+    }
+    protected virtual void OnCharacterStopMove()
+    {
+        
     }
     protected virtual void FixedUpdate()
     {
@@ -41,25 +69,25 @@ public class BaseAbility : MonoBehaviour
     #region AbilityStates
     protected virtual void ExecuteAbility()
     {
-        
+        print($"execute {this.name}");
     }
     protected virtual void AbilityReady()
     {
         abilityState = AbilityState.Ready;
-        AbilityReadyEvent.Invoke();
+        //AbilityReadyEvent.Invoke();
     }
     protected virtual void OnFinishAbility()
     {
-        Debug.Log($"{gameObject} ability finished");
-        AbilityFinishedEvent.Invoke();
+        print($"execute {this.name} finished");
+        //AbilityFinishedEvent.Invoke();
         StartCoroutine(AbilityCooldownTimer());
     }
     #endregion
 
-    public virtual void ActivateAbility(GameObject source,GameObject Target)
+    public virtual void ActivateAbility(GameObject source, GameObject Target)
     {
         Parameters activatorParams = source.GetComponent<Parameters>();
-        
+
         if (activatorParams == null)
         {
             Debug.LogError($"{source.name} has no params");
@@ -69,26 +97,34 @@ public class BaseAbility : MonoBehaviour
         {
             Debug.LogError($"{this.name} has no target!");
         }
-        if (activatorParams.getEnergy() >= cost  )
+        if (activatorParams.getEnergy() >= cost)
         {
 
-            
+
             if (CanActavateAbility())
             {
-                print($"activate {this.name} with target {Target}");
-                //print($"Try to execute {this.name}");
-                activatorParams.changeEnergy(-cost);
-                AbilityExecutingEvent.Invoke();
-                StartCoroutine(AbilityExecuteTimer());
                 
+                activatorParams.changeEnergy(-cost);
+                //AbilityExecutingEvent.Invoke();
+                if (abilityExecutionType == AbilityExecutionType.Continuous)
+                {
+                    StartCoroutine(AbilityExecuteTimer());
+                }
+                else if( abilityExecutionType == AbilityExecutionType.Single ) 
+                { 
+                    ExecuteAbility();
+                    OnFinishAbility();
+                }
+                
+
             }
-             else
+            else
             {
                 print("cooldown!");
             }
         }
         else
-        { 
+        {
             print("Not enought energy! ");
             return;
         }
@@ -128,10 +164,10 @@ public class BaseAbility : MonoBehaviour
     {
         abilityState = AbilityState.Executing;
         float t = 0;
-        while (t<=executeTime)
+        while (t <= executeTime)
         {
             ExecuteAbility();
-            t+= Time.deltaTime; 
+            t += Time.deltaTime;
             yield return null;
         }
 
@@ -150,5 +186,10 @@ public class BaseAbility : MonoBehaviour
         Ready,
         Executing,
         Cooldown
+    }
+    private enum AbilityExecutionType
+    {
+        Single,
+        Continuous
     }
 }

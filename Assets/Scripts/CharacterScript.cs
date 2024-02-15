@@ -14,14 +14,19 @@ public class CharacterScript : MonoBehaviour
     protected GameObject forwardObject;
     protected CharacterScript attackTarget = null;
     protected Movement movementScript;
+    protected bool isAttacking = false;
 
     protected Parameters parameters;
     protected List<CharacterScript> Enemylist = new List<CharacterScript>();
-    private void Awake()
+    protected virtual void Awake()
     {
 
         parameters = GetComponent<Parameters>();
-        
+        movementScript = GetComponent<Movement>();
+        if (movementScript == null)
+        {
+            Debug.LogError($" {this.name} has no attached movement");
+        }
 
     }
     protected virtual int GetCharacterPriority()
@@ -35,27 +40,17 @@ public class CharacterScript : MonoBehaviour
         {
             Debug.LogError($"there is no forward object attached to {this.name}");
         }
-        movementScript = GetComponent<Movement>();
-        if (movementScript == null)
-        {
-            Debug.LogError($" {this.name} has no attached movement");
-        }
+
 
     }
     public GameObject GetForwardObject()
     {
         return forwardObject;
     }
-    public virtual void BasicAttack()
+    public virtual void BasicAttack(CharacterScript target)
     {
-        if (baseAttack != null)
-        {
-            baseAttack.ActivateAbility(this.gameObject,baseAttack.GetTarget());//TODO Не целиться в себя
-        }
-        else
-        {
-            Debug.LogError($"there is no basic attack attached to {this.name}");
-        }
+   
+
     }
 
     public void TriggerAbility(int number)
@@ -67,7 +62,7 @@ public class CharacterScript : MonoBehaviour
             BaseAbility ability = abilityArray[number - 1];
             if (ability != null)
             {
-                ability.ActivateAbility(this.gameObject,ability.GetTarget()); //Задаем в качестве цели объект активирующий абилку. Если нужна конкретная цель, переписываем ее в самой абилке
+                ability.ActivateAbility(this.gameObject, ability.GetTarget()); //Задаем в качестве цели объект активирующий абилку. Если нужна конкретная цель, переписываем ее в самой абилке
             }
             else
             {
@@ -81,9 +76,9 @@ public class CharacterScript : MonoBehaviour
     }
     protected virtual CharacterScript GetPossibleEnemyList(List<CharacterScript> listOfTargets)
     {
-        if(listOfTargets.Count != 0)
+        if (listOfTargets.Count != 0)
         {
-            if(listOfTargets.Contains(attackTarget))
+            if (listOfTargets.Contains(attackTarget))
             {
                 return attackTarget;
             }
@@ -92,31 +87,32 @@ public class CharacterScript : MonoBehaviour
                 int cPriority = 0;
                 //CharacterScript newTarget = listOfTargets[0];//TODO get closest target
                 CharacterScript newTarget = null;
-                foreach ( CharacterScript potentialTarget in listOfTargets)
+                foreach (CharacterScript potentialTarget in listOfTargets)
                 {
-                    if (potentialTarget.GetCharacterPriority()>cPriority)
+                    if (potentialTarget.GetCharacterPriority() > cPriority)
                     {
                         cPriority = potentialTarget.GetCharacterPriority();
                         newTarget = potentialTarget;
                     }
                 }
+                attackTarget = newTarget;
                 print($"select {newTarget} as new target. Priority {cPriority}");
                 return newTarget;
             }
-            
+
         }
         else
         {
-               return null;
+            return null;
         }
-       
 
-        
+
+
     }
 
     public void TakeDamage(float damage)
     {
-        
+
         parameters.ChangeHealth(-damage);
         float health = parameters.getHealth();
         if (health <= 0)
@@ -132,7 +128,7 @@ public class CharacterScript : MonoBehaviour
     }
     public void AddEnemyToEnemyList(CharacterScript Enemy)
     {
-        if(Enemy == gameObject)// игнорим сами себя
+        if (Enemy == gameObject)// игнорим сами себя
         {
             return;
         }
@@ -144,5 +140,51 @@ public class CharacterScript : MonoBehaviour
         {
             Enemylist.Remove(Enemy);
         }
+    }
+    protected virtual void TryToAttack()
+    {
+        if (!baseAttack)
+        {
+            Debug.LogError($"there is no basic attack attached to {this.name}");
+            return;
+        }
+        CheckForTarget();
+
+    }
+    protected IEnumerator RepeatAttack(CharacterScript RepeatAttackTarget)
+    {
+        isAttacking = true;
+        while (RepeatAttackTarget != null)
+        {
+            yield return null;
+            if (baseAttack.CanActavateAbility())
+            {
+                baseAttack.ActivateAbility(this.gameObject, RepeatAttackTarget.gameObject);
+            }
+        }
+        print("end attack");
+        isAttacking = false;
+        CheckForTarget();
+
+    }
+    protected void CheckForTarget()
+    {
+        CharacterScript attackTarget = GetPossibleEnemyList(Enemylist);
+        if (attackTarget != null)
+        {
+            //baseAttack.ActivateAbility(this.gameObject, attackTarget.gameObject);
+            //baseAttack.ChangeIsAttacking(true);
+            BasicAttack(attackTarget);
+
+        }
+        else
+        {
+            print("No valid targets!");
+        }
+
+    }
+    public Movement GetMovementScript()
+    {
+        return movementScript;
     }
 }

@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1970445435933368519, guid: 264e66955c108f548bdd9fe0a5b92130,
+        type: 3}
+      propertyPath: speed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3950980585080880188, guid: 264e66955c108f548bdd9fe0a5b92130,
         type: 3}
       propertyPath: m_RootOrder
@@ -76,7 +81,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5369380534715288170}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1507013658687248787
+--- !u!114 &-7285951491776231603
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

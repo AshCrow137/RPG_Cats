@@ -143,6 +143,7 @@ GameObject:
   - component: {fileID: 3950980585080880185}
   - component: {fileID: 3950980585080880186}
   - component: {fileID: 1854090503}
+  - component: {fileID: 1970445435933368519}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -268,9 +269,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f1449e05e6f8849a5642bcc703df6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AbilityList: []
   baseAttack: {fileID: 0}
-  priority: 1
+  abilityArray:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1854090503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,3 +291,17 @@ MonoBehaviour:
   energy: 0
   maxEnergy: 3
   energyRegen: 1
+  priority: 1
+--- !u!114 &1970445435933368519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3950980585080880190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 591904de3becbed4abb5ba6d39289152, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
