@@ -7,6 +7,10 @@ public class BaseAttack : BaseAbility
     private bool isAttacking = false;
     private bool startMoveToTarget = false;
     private bool canAttack;
+    [SerializeField]
+    private bool followTarget = true;
+
+    
 
 
     public override void ActivateAbility(GameObject source, GameObject Target)
@@ -29,14 +33,19 @@ public class BaseAttack : BaseAbility
             Attack(source, Target);
 
         }
-        else
+        else if ( followTarget)
         {
-            if(!startMoveToTarget)
+            if (!startMoveToTarget)
             {
                 StartCoroutine(MoveTotarget(movement, source, Target));
             }
-            
         }
+        else
+        {
+            
+            abilityOwner.StopBasicAttack();
+        }
+
     }
     protected IEnumerator MoveTotarget(Movement movement,GameObject source, GameObject Target)
     {

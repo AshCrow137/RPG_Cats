@@ -28,7 +28,8 @@ public class PlayerScript : CharacterScript
         {
             if (!isAttacking)
             {
-                StartCoroutine(RepeatAttack(target));
+                AttackCoroutine = RepeatAttack(target);
+                StartCoroutine(AttackCoroutine);
             }
         }
         else

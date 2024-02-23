@@ -18,9 +18,12 @@ public class BaseAbility : MonoBehaviour
     protected float executeTime;
     [SerializeField]
     protected float abilityDistance;
+
+    protected CharacterScript abilityOwner;
+
     //Private
     private AbilityState abilityState;
-    private CharacterScript abilityOwner;
+    
 
     //Public
     //public  UnityEvent AbilityReadyEvent = new UnityEvent();
@@ -42,7 +45,7 @@ public class BaseAbility : MonoBehaviour
             Movement movement = abilityOwner.GetMovementScript();
             if (movement != null) 
             {
-                print(movement.ToString());
+                
                 movement.OnMove.AddListener(OnCharacterMove);
                 movement.OnMovementFinished.AddListener(OnCharacterStopMove);
             }

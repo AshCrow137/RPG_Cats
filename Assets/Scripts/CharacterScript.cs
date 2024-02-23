@@ -18,6 +18,9 @@ public class CharacterScript : MonoBehaviour
 
     protected Parameters parameters;
     protected List<CharacterScript> Enemylist = new List<CharacterScript>();
+
+   
+    protected IEnumerator AttackCoroutine; 
     protected virtual void Awake()
     {
 
@@ -36,9 +39,14 @@ public class CharacterScript : MonoBehaviour
     private void Start()
     {
         forwardObject = GetComponentInChildren<ForwardObjectScript>().gameObject;
-        if (forwardObject == null)
+        if (!forwardObject)
         {
             Debug.LogError($"there is no forward object attached to {this.name}");
+        }
+        if (!baseAttack)
+        {
+            Debug.LogError($"there is no basic attack attached to {this.name}");
+           
         }
 
 
@@ -143,11 +151,7 @@ public class CharacterScript : MonoBehaviour
     }
     protected virtual void TryToAttack()
     {
-        if (!baseAttack)
-        {
-            Debug.LogError($"there is no basic attack attached to {this.name}");
-            return;
-        }
+
         CheckForTarget();
 
     }
@@ -181,6 +185,14 @@ public class CharacterScript : MonoBehaviour
         {
             print("No valid targets!");
         }
+
+    }
+    public void StopBasicAttack()
+    {
+        print("stop BA");
+        StopCoroutine(AttackCoroutine);
+        isAttacking=false;
+        
 
     }
     public Movement GetMovementScript()
