@@ -70,6 +70,7 @@ public class CharacterScript : MonoBehaviour
             BaseAbility ability = abilityArray[number - 1];
             if (ability != null)
             {
+
                 ability.ActivateAbility(this.gameObject, ability.GetTarget()); //Задаем в качестве цели объект активирующий абилку. Если нужна конкретная цель, переписываем ее в самой абилке
             }
             else
@@ -82,7 +83,7 @@ public class CharacterScript : MonoBehaviour
             Debug.LogError("Invalid ability number");
         }
     }
-    protected virtual CharacterScript GetPossibleEnemyList(List<CharacterScript> listOfTargets)
+    protected virtual CharacterScript GetPossibleEnemy(List<CharacterScript> listOfTargets)
     {
         if (listOfTargets.Count != 0)
         {
@@ -116,6 +117,10 @@ public class CharacterScript : MonoBehaviour
 
 
 
+    }
+    protected virtual CharacterScript GetEnemyWithPriority(CharacterScript potentialEnemy)
+    {
+        return null;
     }
 
     public void TakeDamage(float damage)
@@ -173,7 +178,7 @@ public class CharacterScript : MonoBehaviour
     }
     protected void CheckForTarget()
     {
-        CharacterScript attackTarget = GetPossibleEnemyList(Enemylist);
+        CharacterScript attackTarget = GetPossibleEnemy(Enemylist);
         if (attackTarget != null)
         {
             //baseAttack.ActivateAbility(this.gameObject, attackTarget.gameObject);

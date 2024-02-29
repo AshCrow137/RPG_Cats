@@ -18,11 +18,14 @@ public class BaseAbility : MonoBehaviour
     protected float executeTime;
     [SerializeField]
     protected float abilityDistance;
+    [SerializeField]
+    protected bool canBeInterrupted = true;
 
     protected CharacterScript abilityOwner;
 
     //Private
     private AbilityState abilityState;
+    protected IEnumerator AbilityExecutionCoroutine;
     
 
     //Public
@@ -111,7 +114,8 @@ public class BaseAbility : MonoBehaviour
                 //AbilityExecutingEvent.Invoke();
                 if (abilityExecutionType == AbilityExecutionType.Continuous)
                 {
-                    StartCoroutine(AbilityExecuteTimer());
+                    AbilityExecutionCoroutine = AbilityExecuteTimer();
+                    StartCoroutine(AbilityExecutionCoroutine);
                 }
                 else if( abilityExecutionType == AbilityExecutionType.Single ) 
                 { 
@@ -183,12 +187,36 @@ public class BaseAbility : MonoBehaviour
         yield return new WaitForSeconds(cooldown);
         AbilityReady();
     }
+
+    public void StopExecutingAbility()
+    {
+        StopCoroutine(AbilityExecutionCoroutine);
+        abilityState = AbilityState.Cooldown;
+        OnFinishAbility();
+    }
+    public void DisableAbility()
+    {
+        if (abilityState == AbilityState.Ready)
+        {
+            abilityState = AbilityState.Disabled;
+        }
+        
+    }
+    public void EnableAbility()
+    {
+        if (abilityState == AbilityState.Disabled)
+        {
+            abilityState = AbilityState.Ready;
+        }
+    }
+
     #endregion
     private enum AbilityState
     {
         Ready,
         Executing,
-        Cooldown
+        Cooldown,
+        Disabled
     }
     private enum AbilityExecutionType
     {
