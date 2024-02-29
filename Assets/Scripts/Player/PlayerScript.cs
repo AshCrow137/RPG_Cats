@@ -37,6 +37,13 @@ public class PlayerScript : CharacterScript
             Debug.LogError($"there is no basic attack attached to {this.name}");
         }
     }
-
+    public override void AddEnemyToEnemyList(CharacterScript Enemy)
+    {
+        if (Enemy.GetType() != typeof(EnemyScript))
+        {
+            return;
+        }
+        base.AddEnemyToEnemyList(Enemy);
+    }
 }
 

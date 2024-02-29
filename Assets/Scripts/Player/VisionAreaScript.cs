@@ -16,7 +16,7 @@ public class VisionAreaScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<EnemyScript>(out EnemyScript enemy))
+        if (collision.TryGetComponent<CharacterScript>(out CharacterScript enemy))
         {
             _characterScript.AddEnemyToEnemyList(enemy);
         }
@@ -24,7 +24,7 @@ public class VisionAreaScript : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<EnemyScript>(out EnemyScript enemy))
+        if (collision.TryGetComponent<CharacterScript>(out CharacterScript enemy))
         {
             _characterScript.RemoveEnemyFromEnemyList(enemy);
         }

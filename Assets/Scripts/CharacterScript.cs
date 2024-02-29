@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class CharacterScript : MonoBehaviour
@@ -87,27 +88,34 @@ public class CharacterScript : MonoBehaviour
     {
         if (listOfTargets.Count != 0)
         {
-            if (listOfTargets.Contains(attackTarget))
-            {
-                return attackTarget;
-            }
-            else
-            {
-                int cPriority = 0;
+            //if (listOfTargets.Contains(attackTarget))
+            //{
+            //    return attackTarget;
+            //}
+            //else
+            //{
+            //    int cPriority = 0;
+                float minDistance = Mathf.Infinity;
                 //CharacterScript newTarget = listOfTargets[0];//TODO get closest target
                 CharacterScript newTarget = null;
                 foreach (CharacterScript potentialTarget in listOfTargets)
                 {
-                    if (potentialTarget.GetCharacterPriority() > cPriority)
+                    //if (potentialTarget.GetCharacterPriority() > cPriority)
+                    //{
+                    //    cPriority = potentialTarget.GetCharacterPriority();
+                    //    newTarget = potentialTarget;
+                    //}
+                    float distance = Vector2.Distance(transform.position,potentialTarget.transform.position);
+                    if(distance <minDistance)
                     {
-                        cPriority = potentialTarget.GetCharacterPriority();
+                        minDistance = distance;
                         newTarget = potentialTarget;
                     }
                 }
-                attackTarget = newTarget;
-                print($"select {newTarget} as new target. Priority {cPriority}");
+                
+                print($"select {newTarget} as new target");
                 return newTarget;
-            }
+            //}
 
         }
         else
@@ -139,7 +147,7 @@ public class CharacterScript : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
-    public void AddEnemyToEnemyList(CharacterScript Enemy)
+    public virtual void AddEnemyToEnemyList(CharacterScript Enemy)
     {
         if (Enemy == gameObject)// игнорим сами себя
         {
@@ -154,7 +162,7 @@ public class CharacterScript : MonoBehaviour
             Enemylist.Remove(Enemy);
         }
     }
-    protected virtual void TryToAttack()
+    public void TryToAttack()
     {
 
         CheckForTarget();
@@ -178,7 +186,7 @@ public class CharacterScript : MonoBehaviour
     }
     protected void CheckForTarget()
     {
-        CharacterScript attackTarget = GetPossibleEnemy(Enemylist);
+        attackTarget = GetPossibleEnemy(Enemylist);
         if (attackTarget != null)
         {
             //baseAttack.ActivateAbility(this.gameObject, attackTarget.gameObject);
@@ -192,12 +200,15 @@ public class CharacterScript : MonoBehaviour
         }
 
     }
-    public void StopBasicAttack()
+    public void StopBasicAttack(bool searchForNewEnemy)
     {
         print("stop BA");
         StopCoroutine(AttackCoroutine);
         isAttacking=false;
-        
+        if (searchForNewEnemy)
+        {
+            TryToAttack();
+        }
 
     }
     public Movement GetMovementScript()
