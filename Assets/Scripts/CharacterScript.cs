@@ -13,7 +13,7 @@ public class CharacterScript : MonoBehaviour
     protected BaseAbility[] abilityArray = new BaseAbility[3];
 
     protected GameObject forwardObject;
-    protected CharacterScript attackTarget = null;
+    //protected CharacterScript attackTarget = null;
     protected Movement movementScript;
     protected bool isAttacking = false;
 
@@ -112,9 +112,17 @@ public class CharacterScript : MonoBehaviour
                         newTarget = potentialTarget;
                     }
                 }
+                if(baseAttack.checkDistance(transform,newTarget.transform))
+                {
+                    print($"select {newTarget} as new target");
+                    return newTarget;
+                }
+                else 
+                {
+                    //startFollow?
+                    return null; 
+                }
                 
-                print($"select {newTarget} as new target");
-                return newTarget;
             //}
 
         }
@@ -174,10 +182,20 @@ public class CharacterScript : MonoBehaviour
         while (RepeatAttackTarget != null)
         {
             yield return null;
-            if (baseAttack.CanActavateAbility())
-            {
-                baseAttack.ActivateAbility(this.gameObject, RepeatAttackTarget.gameObject);
+            if (baseAttack.CanActavateAbility()&&baseAttack.CanAttack())
+            {             
+
+                if (baseAttack.checkDistance(transform, RepeatAttackTarget.transform))
+                {
+                    baseAttack.ActivateAbility(this.gameObject, RepeatAttackTarget.gameObject);
+                }
+                else
+                {
+                    StopBasicAttack(true);
+                }
+                RepeatAttackTarget = GetPossibleEnemy(Enemylist);
             }
+            
         }
         print("end attack");
         isAttacking = false;
@@ -186,13 +204,10 @@ public class CharacterScript : MonoBehaviour
     }
     protected void CheckForTarget()
     {
-        attackTarget = GetPossibleEnemy(Enemylist);
+        CharacterScript attackTarget = GetPossibleEnemy(Enemylist);
         if (attackTarget != null)
         {
-            //baseAttack.ActivateAbility(this.gameObject, attackTarget.gameObject);
-            //baseAttack.ChangeIsAttacking(true);
             BasicAttack(attackTarget);
-
         }
         else
         {

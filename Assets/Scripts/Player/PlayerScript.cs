@@ -4,12 +4,13 @@ using UnityEngine;
 public class PlayerScript : CharacterScript
 {
     public static PlayerScript Instance { get; private set; }
-
+    [SerializeField]
+    private GameObject BasicAttackUI;
 
     protected override void Awake()
     {
         base.Awake();
-
+        BasicAttackUI.SetActive(false);
         if (Instance != null && Instance != this)
         {
             Destroy(this);
@@ -19,6 +20,15 @@ public class PlayerScript : CharacterScript
             Instance = this;
         }
 
+    }
+    public void DrawBasicAttackRadius()
+    {
+        BasicAttackUI.transform.localScale = new Vector3(baseAttack.GetAbilityDistance(), baseAttack.GetAbilityDistance(), 1);
+        BasicAttackUI.SetActive(true);
+    }
+    public void StopDrawAttackRadius()
+    {
+        BasicAttackUI.SetActive(false);
     }
 
 
@@ -39,10 +49,10 @@ public class PlayerScript : CharacterScript
     }
     public override void AddEnemyToEnemyList(CharacterScript Enemy)
     {
-        if (Enemy.GetType() != typeof(EnemyScript))
-        {
-            return;
-        }
+        //if (Enemy.GetType() != typeof(EnemyScript))
+        //{
+        //    return;
+        //}
         base.AddEnemyToEnemyList(Enemy);
     }
 }

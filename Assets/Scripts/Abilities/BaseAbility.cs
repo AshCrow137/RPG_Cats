@@ -209,7 +209,10 @@ public class BaseAbility : MonoBehaviour
             abilityState = AbilityState.Ready;
         }
     }
-
+    public float GetAbilityDistance()
+    {
+        return abilityDistance;
+    }
     #endregion
     private enum AbilityState
     {

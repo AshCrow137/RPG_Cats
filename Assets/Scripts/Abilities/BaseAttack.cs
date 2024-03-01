@@ -20,6 +20,7 @@ public class BaseAttack : BaseAbility
             return;
         }
         base.ActivateAbility(source, Target);
+        Attack(source, Target);
         //Movement movement = source.GetComponent<Movement>();
         //if (movement == null)
         //{
@@ -27,12 +28,12 @@ public class BaseAttack : BaseAbility
         //    return;
         //}
 
-        if (checkDistance(source.transform,Target.transform))
-        {
+        //if (checkDistance(source.transform,Target.transform))
+        //{
 
-            Attack(source, Target);
+        //    Attack(source, Target);
 
-        }
+        //}
         //else if ( followTarget)
         //{
         //    if (!startMoveToTarget)
@@ -40,11 +41,11 @@ public class BaseAttack : BaseAbility
         //        StartCoroutine(MoveTotarget(movement, source, Target));
         //    }
         //}
-        else
-        {
+        //else
+        //{
             
-            abilityOwner.StopBasicAttack(true);
-        }
+        //    abilityOwner.StopBasicAttack(true);
+        //}
 
     }
     //protected IEnumerator MoveTotarget(Movement movement,GameObject source, GameObject Target)
@@ -101,7 +102,11 @@ public class BaseAttack : BaseAbility
     }
     public bool IsAttacking()
     { return isAttacking; }
-    private bool checkDistance(Transform source, Transform target)
+    public bool CanAttack()
+    { 
+        return canAttack;
+    }
+    public bool checkDistance(Transform source, Transform target)
     {
         float distance = Vector2.Distance(source.position, target.position);
         if (distance <= abilityDistance)
