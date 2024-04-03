@@ -147,11 +147,11 @@ public class CharacterScript : MonoBehaviour
         if (health <= 0)
         {
 
-            CharacterDead();
+            KillCharacter();
         }
 
     }
-    public virtual void CharacterDead()
+    public virtual void KillCharacter()
     {
         Destroy(this.gameObject);
     }

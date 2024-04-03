@@ -7,6 +7,8 @@ public class PlayerScript : CharacterScript
     [SerializeField]
     private GameObject BasicAttackUI;
 
+    
+
     protected override void Awake()
     {
         base.Awake();
@@ -54,6 +56,10 @@ public class PlayerScript : CharacterScript
         //    return;
         //}
         base.AddEnemyToEnemyList(Enemy);
+    }
+    public BaseAbility[] GetAbilityList()
+    {
+        return abilityArray;
     }
 }
 

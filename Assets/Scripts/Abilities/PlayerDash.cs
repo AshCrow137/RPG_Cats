@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerDash : BaseAbility
+public class PlayerDash : BasePlayerAbility
 {
 
 
@@ -14,22 +14,6 @@ public class PlayerDash : BaseAbility
     private void Start()
     {
 
-        rb = GetComponentInParent<Rigidbody2D>();
-        movementScript = GetComponentInParent<Movement>();
-
-        if (movementScript == null)
-        {
-            Debug.LogError($"No movement script attached to {this.name}");
-        }
-        else
-        {
-
-            forwardObject = movementScript.GetForwardObject();
-        }
-        if (rb == null)
-        {
-            Debug.LogError($"No Rigidbody2d attached to {this.name}");
-        }
     }
     public void Dash()
     {
@@ -46,7 +30,28 @@ public class PlayerDash : BaseAbility
 
     }
 
+    public override void ActivateAbility(GameObject source, GameObject Target)
+    {
 
+        rb = source.GetComponent<Rigidbody2D>();
+        movementScript = source.GetComponent<Movement>();
+        print(rb);
+        if (movementScript == null)
+        {
+            Debug.LogError($"No movement script attached to {this.name}");
+        }
+        else
+        {
+
+            forwardObject = movementScript.GetForwardObject();
+        }
+        if (rb == null)
+        {
+            Debug.LogError($"No Rigidbody2d attached to {this.name}");
+        }
+        base.ActivateAbility(source, Target);
+
+    }
     protected override void ExecuteAbility()
     {
 
@@ -64,6 +69,6 @@ public class PlayerDash : BaseAbility
     }
     public override GameObject GetTarget()
     {
-        return rb.gameObject;
+        return gameObject;
     }
 }

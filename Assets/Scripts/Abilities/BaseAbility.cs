@@ -10,6 +10,7 @@ public class BaseAbility : MonoBehaviour
     protected float damage = 1f;
     [SerializeField]
     protected float cooldown;
+    private float RestCooldownTime;
     [SerializeField]
     protected int cost;
     [SerializeField]
@@ -26,12 +27,12 @@ public class BaseAbility : MonoBehaviour
     //Private
     private AbilityState abilityState;
     protected IEnumerator AbilityExecutionCoroutine;
-    
+
 
     //Public
     //public  UnityEvent AbilityReadyEvent = new UnityEvent();
     //public  UnityEvent AbilityExecutingEvent = new UnityEvent();
-    //public  UnityEvent AbilityFinishedEvent = new UnityEvent();
+    //public UnityEvent AbilityFinishedEvent = new UnityEvent();
 
 
     #region UnityMethods
@@ -183,8 +184,14 @@ public class BaseAbility : MonoBehaviour
     }
     protected IEnumerator AbilityCooldownTimer()
     {
+        RestCooldownTime = cooldown;
         abilityState = AbilityState.Cooldown;
-        yield return new WaitForSeconds(cooldown);
+        while (RestCooldownTime>0)
+        {
+            RestCooldownTime -= Time.deltaTime;
+            yield return null;
+        }
+        
         AbilityReady();
     }
 
@@ -212,6 +219,10 @@ public class BaseAbility : MonoBehaviour
     public float GetAbilityDistance()
     {
         return abilityDistance;
+    }
+    public float GetRestCooldownTime()
+    {
+        return RestCooldownTime;
     }
     #endregion
     private enum AbilityState
