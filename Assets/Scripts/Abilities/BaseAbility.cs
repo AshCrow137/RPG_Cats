@@ -32,7 +32,7 @@ public class BaseAbility : MonoBehaviour
     //Public
     //public  UnityEvent AbilityReadyEvent = new UnityEvent();
     //public  UnityEvent AbilityExecutingEvent = new UnityEvent();
-    //public UnityEvent AbilityFinishedEvent = new UnityEvent();
+    public UnityEvent AbilityFinishedEvent = new UnityEvent();
 
 
     #region UnityMethods
@@ -76,7 +76,7 @@ public class BaseAbility : MonoBehaviour
     #region AbilityStates
     protected virtual void ExecuteAbility()
     {
-        print($"execute {this.name}");
+        //print($"execute {this.name}");
     }
     protected virtual void AbilityReady()
     {
@@ -85,9 +85,10 @@ public class BaseAbility : MonoBehaviour
     }
     protected virtual void OnFinishAbility()
     {
-        print($"execute {this.name} finished");
-        //AbilityFinishedEvent.Invoke();
+        //print($"execute {this.name} finished");
+
         StartCoroutine(AbilityCooldownTimer());
+        AbilityFinishedEvent.Invoke();
     }
     #endregion
 
@@ -186,8 +187,10 @@ public class BaseAbility : MonoBehaviour
     {
         RestCooldownTime = cooldown;
         abilityState = AbilityState.Cooldown;
+
         while (RestCooldownTime>0)
         {
+            //print(RestCooldownTime);
             RestCooldownTime -= Time.deltaTime;
             yield return null;
         }

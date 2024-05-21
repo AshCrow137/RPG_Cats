@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
 
         if (player == null)
         {
-            Debug.Log("player not found on camera!");
+            Debug.LogError("player not found on camera!");
         }
     }
     private void FixedUpdate()

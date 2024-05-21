@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,8 +10,19 @@ public class ButtonsManagerScript : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] abilityButtons = new GameObject[3];
-    private BaseAbility[] abilities;
- 
+    [SerializeField]
+    private GameObject basicAttackButton;
+    private BaseAbility[] _abilities;
+
+    private delegate void StartAbilityTimerDelegate(Image cdImage, TextMeshProUGUI cdText, BaseAbility ability);
+    StartAbilityTimerDelegate AbilityDelegate;
+    //public ButtonsManagerScript(BaseAbility[] abilities) 
+    //{
+    //    print("Constuctor");
+
+
+    //}
+
     public void ActivateAbility(int AbilityNumber)
     {
         
@@ -32,21 +44,23 @@ public class ButtonsManagerScript : MonoBehaviour
         }
         CooldownText.gameObject.SetActive(true);
         CooldownImage.fillAmount = 1;
-
-
+        BasePlayerAbility activatedAbility = _abilities[AbilityNumber - 1] as BasePlayerAbility;
+        activatedAbility.AbilityFinishedEvent.AddListener(delegate { StartAbilityTimer(CooldownImage, CooldownText, activatedAbility); });
         PlayerScript.Instance.TriggerAbility(AbilityNumber);
-        BaseAbility activatedAbility = abilities[AbilityNumber-1];
-    
         
+        //AbilityDelegate= StartAbilityTimer(CooldownImage, CooldownText, activatedAbility);
+        
+
+
     }
 
 
     private void Awake()
     {
-        abilities = PlayerScript.Instance.GetAbilityList();
-        
+       
+        _abilities = PlayerScript.Instance.GetAbilityList();
         int index = 0;
-        foreach(GameObject abilityButton in abilityButtons)
+        foreach (GameObject abilityButton in abilityButtons)
         {
             UpdateAbilityButtonGUI(abilityButton, index);
             index++;
@@ -57,28 +71,45 @@ public class ButtonsManagerScript : MonoBehaviour
     {
 
         Image ButtonAbilityImage = abilityButton.GetComponent<Image>();
-        BasePlayerAbility ability = abilities[index] as BasePlayerAbility;
+        BasePlayerAbility ability = _abilities[index] as BasePlayerAbility;
         
         if (ability != null)
         {
             Sprite AbilityIcon = ability.GetAbilityIcon();
             ButtonAbilityImage.sprite = AbilityIcon;
+            
         }
     }
+    private void StartAbilityTimer(Image cdImage, TextMeshProUGUI cdText, BaseAbility ability)
+    {
+        StartCoroutine(StartButtonCooldownCoroutine(cdImage, cdText, ability)); 
+        ability.AbilityFinishedEvent.RemoveAllListeners();
+    }
+
     private IEnumerator StartButtonCooldownCoroutine(Image cdImage, TextMeshProUGUI cdText, BaseAbility ability)
     {
         float restTime = ability.GetRestCooldownTime();
         float totalTime = ability.getCooldown();
-        print(restTime);
-        print(totalTime);
         while (restTime > 0)
-        {
+        {   
             restTime = ability.GetRestCooldownTime();
             cdImage.fillAmount = restTime / totalTime;
-            cdText.text = restTime.ToString();
-            print(restTime);
+            cdText.text = MathF.Round(restTime,1).ToString();
             yield return null;
         }
         cdText.gameObject.SetActive(false);
+    }
+
+    public void ActivateBasicAttack()
+    {
+        PlayerScript.Instance.TryToAttack();
+    }
+    public void DrawAttackRadius()
+    {
+        PlayerScript.Instance.DrawBasicAttackRadius();
+    }
+    public void StopDrawAttackRadius()
+    {
+        PlayerScript.Instance.StopDrawAttackRadius();
     }
 }

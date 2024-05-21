@@ -5,14 +5,15 @@ public class PlayerScript : CharacterScript
 {
     public static PlayerScript Instance { get; private set; }
     [SerializeField]
-    private GameObject BasicAttackUI;
+    private GameObject BasicAttackRadiusObject;
 
-    
+
+
 
     protected override void Awake()
     {
         base.Awake();
-        BasicAttackUI.SetActive(false);
+        BasicAttackRadiusObject.SetActive(false);
         if (Instance != null && Instance != this)
         {
             Destroy(this);
@@ -25,12 +26,12 @@ public class PlayerScript : CharacterScript
     }
     public void DrawBasicAttackRadius()
     {
-        BasicAttackUI.transform.localScale = new Vector3(baseAttack.GetAbilityDistance(), baseAttack.GetAbilityDistance(), 1);
-        BasicAttackUI.SetActive(true);
+        BasicAttackRadiusObject.transform.localScale = new Vector3(baseAttack.GetAbilityDistance(), baseAttack.GetAbilityDistance(), 1);
+        BasicAttackRadiusObject.SetActive(true);
     }
     public void StopDrawAttackRadius()
     {
-        BasicAttackUI.SetActive(false);
+        BasicAttackRadiusObject.SetActive(false);
     }
 
 

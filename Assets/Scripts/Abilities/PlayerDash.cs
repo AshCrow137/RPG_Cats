@@ -35,7 +35,7 @@ public class PlayerDash : BasePlayerAbility
 
         rb = source.GetComponent<Rigidbody2D>();
         movementScript = source.GetComponent<Movement>();
-        print(rb);
+        //print(rb);
         if (movementScript == null)
         {
             Debug.LogError($"No movement script attached to {this.name}");

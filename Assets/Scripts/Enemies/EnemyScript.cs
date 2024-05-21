@@ -1,14 +1,24 @@
+using System.Collections;
+using UnityEngine;
+
 public class EnemyScript : CharacterScript
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+    EnemyMovement enemyMovement;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        enemyMovement = GetComponent<EnemyMovement>();
+        if (!enemyMovement )
+        {
+            Debug.LogError("Cast failed");
+        }
+        else
+        {
+            enemyMovement.StartRandomMovement();
+        }
+
+       
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

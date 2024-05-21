@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class AnimationScript : MonoBehaviour
 {
-    private Animator animator; public Animator GetAnimator() { return animator; }
+    private Animator animator;
+    
 
     // Start is called before the first frame update
     private void Awake()
@@ -16,6 +17,8 @@ public class AnimationScript : MonoBehaviour
             animator.SetFloat("Horizontal", horizontal);
             animator.SetFloat("Vertical", vertical);
             animator.SetFloat("Speed", speed);
+           
         }
     }
+    public Animator GetAnimator() { return animator; }
 }
