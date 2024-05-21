@@ -73,9 +73,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -44025399
+  m_SortingLayer: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: -853190565, guid: a0b295ae8f4679147ad4cdc3db8868bc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -125,9 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 668be3e17a38c214e9f35adb735f38b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileTarget: {fileID: 0}
   projectileSpeed: 8
-  angleChangingSpeed: 720
 --- !u!50 &3296681884476220284
 Rigidbody2D:
   serializedVersion: 4

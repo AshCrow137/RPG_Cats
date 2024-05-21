@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -10,14 +8,14 @@ public class CameraMovement : MonoBehaviour
     {
         player = PlayerScript.Instance.gameObject;
 
-        if (player == null )
+        if (player == null)
         {
-            Debug.Log("player not found on camera!");
+            Debug.LogError("player not found on camera!");
         }
     }
     private void FixedUpdate()
     {
-        if ( player != null )
+        if (player != null)
         {
             transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
         }

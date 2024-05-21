@@ -1,88 +1,124 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+using static Unity.VisualScripting.Member;
 
 public class BaseAttack : BaseAbility
 {
     private bool isAttacking = false;
-    private GameObject attackSource;
-    private GameObject attackTarget;
+    //private bool startMoveToTarget = false;
     private bool canAttack;
+    //[SerializeField]
+    //private bool followTarget = true;
+
+    
+
 
     public override void ActivateAbility(GameObject source, GameObject Target)
     {
-        base.ActivateAbility(source, Target);
-        attackSource = source;
-        attackTarget = Target;
-        Movement movement = source.GetComponent<Movement>();
-        if (movement == null) 
+        if (!canAttack)
         {
-            Debug.LogError($"{this.gameObject} has no attachment Movement component!");
             return;
         }
+        base.ActivateAbility(source, Target);
+        Attack(source, Target);
+        //Movement movement = source.GetComponent<Movement>();
+        //if (movement == null)
+        //{
+        //    Debug.LogError($"{this.gameObject} has no attachment Movement component!");
+        //    return;
+        //}
 
-        if (canAttack) 
-        {
-            isAttacking = true;
-            movement.setTarget(null);
-            Attack(source,Target);
-        }
-        else
-        {
-            print("Too far!");
-            isAttacking = false;
-            movement.setTarget(Target.transform);
-        }
+        //if (checkDistance(source.transform,Target.transform))
+        //{
+
+        //    Attack(source, Target);
+
+        //}
+        //else if ( followTarget)
+        //{
+        //    if (!startMoveToTarget)
+        //    {
+        //        StartCoroutine(MoveTotarget(movement, source, Target));
+        //    }
+        //}
+        //else
+        //{
+            
+        //    abilityOwner.StopBasicAttack(true);
+        //}
+
     }
+    //protected IEnumerator MoveTotarget(Movement movement,GameObject source, GameObject Target)
+    //{
+    //    startMoveToTarget = true;
+    //    while (!checkDistance(source.transform,Target.transform))
+    //    {
+    //        yield return null;
+    //        movement.MoveToTarget(Target.transform);
+    //    }
+    //    startMoveToTarget= false;
+    //}
+    
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        if (attackTarget != null&&attackSource!=null) 
-        {
-            checkDistance(attackSource.transform, attackTarget.transform);
-        }
-        
+
+
     }
-    protected virtual void Attack(GameObject source,GameObject target)
+    protected virtual void Attack(GameObject source, GameObject target)
     {
         print($"Attack {target} for {damage}");
         //TODO Animations 
 
     }
-    protected override void executeAbility()
+    protected override void ExecuteAbility()
     {
-        base.executeAbility();
+        base.ExecuteAbility();
 
-        
+
     }
     protected override void OnFinishAbility()
     {
         base.OnFinishAbility();
         
+
+    }
+    protected override void OnCharacterMove()
+    {
+        base.OnCharacterMove();
+        canAttack = false;
+        
+    }
+    protected override void OnCharacterStopMove()
+    {
+        base.OnCharacterStopMove();
+        canAttack = true;
+        
     }
 
     public void ChangeIsAttacking(bool isAttack)
     {
-        isAttacking=isAttack;
+        isAttacking = isAttack;
     }
     public bool IsAttacking()
     { return isAttacking; }
-    private void checkDistance(Transform source,Transform target)
+    public bool CanAttack()
+    { 
+        return canAttack;
+    }
+    public bool checkDistance(Transform source, Transform target)
     {
         float distance = Vector2.Distance(source.position, target.position);
-        
-        if (distance <= abilityDistance && !isAttacking)
+        if (distance <= abilityDistance)
         {
-            canAttack = true;
-            ActivateAbility(attackSource, attackTarget);
-           
+            return true;
         }
-        else 
-        {
-            canAttack=false;
-            
+        else
+        {   
+            print("Too far!");
+            return false;
+
         }
-        
     }
+
 }

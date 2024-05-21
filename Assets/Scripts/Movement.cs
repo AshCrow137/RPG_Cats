@@ -1,42 +1,97 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
+using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {
-    
-    protected static Rigidbody2D rb;
-    protected static Animator animator;
-    protected static ForwardObjectScript forwardObject;
-    protected static AnimationScript animationScript;
+    protected  Rigidbody2D rb;
+
+    protected  ForwardObjectScript forwardObject;
+    protected  AnimationScript animationScript;
     protected bool canMove = true;
 
-    protected Vector2 movement;
+   
+    protected Vector2 movementDirection;
 
     //Movement parameters
     [SerializeField]
     protected float speed;
 
-    protected Transform target;
-    private void Awake()
+    //protected Transform target;
+    [HideInInspector]
+    public  UnityEvent OnMove = new UnityEvent();
+    [HideInInspector]
+    public  UnityEvent OnMovementFinished = new UnityEvent();
+
+  
+    protected virtual void Awake()
     {
         forwardObject = GetComponentInChildren<ForwardObjectScript>();
-        if (forwardObject== null)
+        if (forwardObject == null)
         {
             Debug.LogError($"No forward object attached to {this.name}");
+        }
+        rb = GetComponent<Rigidbody2D>();
+
+
+        animationScript = GetComponent<AnimationScript>();
+        if (!animationScript)
+        {
+            Debug.LogError("Missing AnimationScript");
         }
     }
     protected virtual void Update()
     {
+        
 
     }
     protected virtual void FixedUpdate()
     {
-        if (canMove && target!= null) 
+       
+        
+    }
+    protected virtual void Move()
+    {
+
+        //if (target != null)
+        //{
+        //    setTarget(null);
+        //}
+        if (canMove && movementDirection != Vector2.zero)
         {
-            transform.position = Vector3.MoveTowards(transform.position,target.position,speed* Time.deltaTime);
+            OnMove.Invoke();
+            rb.MovePosition(rb.position + movementDirection.normalized * speed * Time.fixedDeltaTime);
+            RotateForwardObject(movementDirection);
         }
+        else
+        {
+            OnMovementFinished.Invoke();
+
+        }
+
+
+
+
+    }
+    protected void RotateForwardObject(Vector2 direction)
+    {
+        float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
+        forwardObject.transform.eulerAngles = new Vector3(0, 0, -angle);
+    }
+    public virtual void MoveToTarget(Vector3 target)
+    {
+        
+        Vector2 rotationDirection = new Vector2 (target.x, target.y) - new Vector2(transform.position.x, transform.position.y);
+       
+
+        if (canMove && rotationDirection != Vector2.zero )
+        {
+
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            RotateForwardObject(rotationDirection);
+            animationScript.UpdateMovement(rotationDirection.x, rotationDirection.y, rotationDirection.sqrMagnitude);
+
+        }
+
     }
     public ForwardObjectScript GetForwardObject()
     {
@@ -61,17 +116,14 @@ public class Movement : MonoBehaviour
     }
     public float GetCurrentSpeed()
     {
-        return movement.sqrMagnitude;
+        return movementDirection.sqrMagnitude;
     }
     public Vector2 getMovement()
     {
-        return movement;
+        return movementDirection;
     }
-    public void setTarget(Transform newtarget)
-    {
-        target = newtarget;
-
-        print(newtarget);
-       
-    }
+    //public void setTarget(Transform newtarget)
+    //{
+    //    target = newtarget;
+    //}
 }
