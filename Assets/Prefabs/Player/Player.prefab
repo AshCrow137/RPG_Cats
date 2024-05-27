@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3817999703508700562
 Transform:
   m_ObjectHideFlags: 0
@@ -73,8 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: -44025399
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a4327348ab810204b92b1cc795e1ca92,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: f2f2f566abb6f3b40be7423ef45a1937, type: 3}
   m_Color: {r: 0.8773585, g: 0.13574219, b: 0.13574219, a: 0.21176471}
   m_FlipX: 0
   m_FlipY: 0
@@ -241,6 +240,11 @@ PrefabInstance:
     - target: {fileID: 923710152523840052, guid: 526e105e00cb498468ca83847ad71ab3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1481049359306731049, guid: 526e105e00cb498468ca83847ad71ab3,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3528975515460646101, guid: 526e105e00cb498468ca83847ad71ab3,

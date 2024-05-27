@@ -112,4 +112,17 @@ public class ButtonsManagerScript : MonoBehaviour
     {
         PlayerScript.Instance.StopDrawAttackRadius();
     }
+    public void ShowElement(GameObject UIElement)
+    {
+        UIElement.SetActive(true);
+    }
+    public void HideElement(GameObject UIElement)
+    {
+        UIElement.SetActive(false);
+    }
+    public void ExitPressed()
+    {
+        Debug.Log("Exit");
+        Application.Quit();
+    }
 }
