@@ -23,6 +23,8 @@ public class Parameters : MonoBehaviour
     [SerializeField]
     protected int priority = 1;
 
+    [SerializeField]
+    protected int initiative = 0; public int GetInitiative() { return initiative; }
     private void Awake()
     {
         health = maxHealth;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+
 public class CharacterScript : MonoBehaviour
 {
 
@@ -33,9 +34,15 @@ public class CharacterScript : MonoBehaviour
         }
 
     }
+    public Parameters getCharacterParameters()
+    { return parameters; }
     protected virtual int GetCharacterPriority()
     {
         return parameters.GetPriority();
+    }
+    protected virtual void OnStartCombat()
+    {
+        //TurnManagerScript.Instance.AddToCombatants(this, parameters.GetInitiative());
     }
     private void Start()
     {
@@ -50,7 +57,7 @@ public class CharacterScript : MonoBehaviour
            
         }
 
-
+        GlobalEventManager.TurnManagerEvents.Event_StartCombat.AddListener(OnStartCombat);
     }
     public GameObject GetForwardObject()
     {

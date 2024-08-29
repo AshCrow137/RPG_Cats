@@ -39,7 +39,16 @@ public class PlayerScript : CharacterScript
         BasicAttackRadiusObject.SetActive(false);
     }
 
-
+    protected override void OnStartCombat()
+    {
+        base.OnStartCombat();
+        TurnManagerScript.Instance.AddToCombatants(this, parameters.GetInitiative());
+        foreach (CharacterScript character in Enemylist)
+        {
+            TurnManagerScript.Instance.AddToCombatants(character, character.getCharacterParameters().GetInitiative());
+        }
+        GlobalEventManager.TurnManagerEvents.StartRound();
+    }
     public override void BasicAttack(CharacterScript target)
     {
         if (baseAttack != null)

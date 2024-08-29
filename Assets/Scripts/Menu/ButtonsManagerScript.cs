@@ -65,7 +65,7 @@ public class ButtonsManagerScript : MonoBehaviour
             return;
         }
         _abilities = player.GetAbilityList();
-        Debug.Log(_abilities);
+        //Debug.Log(_abilities);
         int index = 0;
         foreach (GameObject abilityButton in abilityButtons)
         {
