@@ -57,8 +57,15 @@ public class ButtonsManagerScript : MonoBehaviour
 
     private void Awake()
     {
-       
-        _abilities = PlayerScript.Instance.GetAbilityList();
+
+        PlayerScript player = PlayerScript.Instance;
+        if (!player)
+        {
+            Debug.LogError("No player!");
+            return;
+        }
+        _abilities = player.GetAbilityList();
+        Debug.Log(_abilities);
         int index = 0;
         foreach (GameObject abilityButton in abilityButtons)
         {

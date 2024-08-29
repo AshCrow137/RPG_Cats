@@ -64,7 +64,7 @@ public class CharacterScript : MonoBehaviour
 
     public void TriggerAbility(int number)
     {
-
+        Debug.Log("Activate ability");
 
         if (number <= abilityArray.Length || number > 0)
         {

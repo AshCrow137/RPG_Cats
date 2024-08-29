@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Zenject;
 
 public class PlayerScript : CharacterScript
 {
@@ -8,12 +9,9 @@ public class PlayerScript : CharacterScript
     private GameObject BasicAttackRadiusObject;
 
 
-
-
-    protected override void Awake()
+    [Inject]
+    private void Constructor()
     {
-        base.Awake();
-        BasicAttackRadiusObject.SetActive(false);
         if (Instance != null && Instance != this)
         {
             Destroy(this);
@@ -22,6 +20,13 @@ public class PlayerScript : CharacterScript
         {
             Instance = this;
         }
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        BasicAttackRadiusObject.SetActive(false);
+      
 
     }
     public void DrawBasicAttackRadius()
