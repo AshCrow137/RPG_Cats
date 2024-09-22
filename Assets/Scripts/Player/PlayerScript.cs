@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using Zenject;
 
 public class PlayerScript : CharacterScript
@@ -42,12 +43,9 @@ public class PlayerScript : CharacterScript
     protected override void OnStartCombat()
     {
         base.OnStartCombat();
-        TurnManagerScript.Instance.AddToCombatants(this, parameters.GetInitiative());
-        foreach (CharacterScript character in Enemylist)
-        {
-            TurnManagerScript.Instance.AddToCombatants(character, character.getCharacterParameters().GetInitiative());
-        }
-        GlobalEventManager.TurnManagerEvents.StartRound();
+        TurnManagerScript.Instance.InitiateCombat(this, Enemylist);
+
+        //GlobalEventManager.TurnManagerEvents.StartRound();
     }
     public override void BasicAttack(CharacterScript target)
     {

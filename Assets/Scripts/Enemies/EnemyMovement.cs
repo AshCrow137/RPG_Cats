@@ -11,6 +11,7 @@ public class EnemyMovement : Movement
 
     private Vector3 startPoint;
 
+    private IEnumerator MovementCoroutine;
     public override void MoveToTarget(Vector3 target)
     {
         base.MoveToTarget(target);
@@ -18,7 +19,8 @@ public class EnemyMovement : Movement
     public void StartRandomMovement()
     {
         startPoint = transform.position;
-        StartCoroutine(RandomMovementTimer());
+        MovementCoroutine = RandomMovementTimer();
+        StartCoroutine(MovementCoroutine);
     }
     private IEnumerator RandomMovementTimer()
     {
@@ -31,7 +33,13 @@ public class EnemyMovement : Movement
             MoveToTarget(destination);
         }
         yield return new WaitForSeconds(WaitForNextMoveTime);
-        StartCoroutine(RandomMovementTimer());
+        MovementCoroutine = RandomMovementTimer();
+        StartCoroutine(MovementCoroutine);
+    }
+    public void StopRandomMovement()
+    {
+        StopCoroutine(MovementCoroutine);
+        
     }
     protected override void FixedUpdate()
     {

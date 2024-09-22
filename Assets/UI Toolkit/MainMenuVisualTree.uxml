@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenuVisualStyle.uss?fileID=7433441132597879392&amp;guid=fdcdb394e2ad2b0489b2af7866fef229&amp;type=3#MainMenuVisualStyle" />
+    <ui:VisualElement name="Background" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Sprites/MainMenu/wallpaperflare.com_wallpaper.jpg?fileID=21300000&amp;guid=765171640e5bac9429cc0752e5ff22d2&amp;type=3#wallpaperflare.com_wallpaper&quot;); align-items: center; justify-content: center; align-self: stretch; -unity-background-scale-mode: stretch-to-fill;">
+        <ui:VisualElement name="MenuBackground" class="background menuBackground" style="display: none;">
+            <ui:Label tabindex="-1" text="Menu" parse-escape-sequences="true" display-tooltip-when-elided="true" name="MainMenuText" class="header" style="justify-content: center;" />
+            <ui:VisualElement name="Buttons" class="buttonsBackground">
+                <ui:Button text="Play" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PlayButton" focusable="true" class="button" style="overflow: visible; visibility: visible; display: flex; position: relative; top: auto;" />
+                <ui:Button text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SettingsButton" class="button" />
+            </ui:VisualElement>
+            <ui:Button text="Exit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ExitButton" class="button" style="justify-content: flex-end;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="SettingsMenu" class="menuBackground" style="display: flex; align-items: flex-start; justify-content: flex-start; padding-left: 80px; padding-bottom: 80px; padding-top: 80px; padding-right: 80px;">
+            <ui:Slider label="Volume" high-value="100" direction="Horizontal" show-input-field="false" inverted="false" page-size="0" low-value="1" name="VolumeSlider" style="font-size: 52px; justify-content: center; align-items: center; align-self: flex-start; -unity-text-align: middle-center; background-image: none; width: 90%; padding-top: 20px;" />
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" style="transform-origin: right top; background-image: url(&quot;project://database/Assets/ImportedAssets/Fantasy%20Wooden%20GUI%20%20Free/normal_ui_set%20A/Close%20Button.png?fileID=2800000&amp;guid=11277a3f23988ec47908362d708edaa8&amp;type=3#Close Button&quot;); width: 70px; height: 70px; overflow: visible; left: 0; top: 0;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

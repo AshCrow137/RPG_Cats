@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 884579369, guid: 526e105e00cb498468ca83847ad71ab3, type: 3}
@@ -89,6 +90,25 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2854363106152454053, guid: 526e105e00cb498468ca83847ad71ab3, type: 3}
     - {fileID: 5596711290881608229, guid: 526e105e00cb498468ca83847ad71ab3, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3528975515460646101, guid: 526e105e00cb498468ca83847ad71ab3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1520916876713824743}
+    - targetCorrespondingSourceObject: {fileID: 3528975515460646101, guid: 526e105e00cb498468ca83847ad71ab3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6300334441282243445}
+    - targetCorrespondingSourceObject: {fileID: 3528975515460646101, guid: 526e105e00cb498468ca83847ad71ab3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1851029337906532974}
+    - targetCorrespondingSourceObject: {fileID: 3528975515460646101, guid: 526e105e00cb498468ca83847ad71ab3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 140305933487745410}
   m_SourcePrefab: {fileID: 100100000, guid: 526e105e00cb498468ca83847ad71ab3, type: 3}
 --- !u!1 &867153961336475123 stripped
 GameObject:
@@ -186,6 +206,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  characterIcon: {fileID: -588606580, guid: 4d4fa572b40345246919d22d0f716eba, type: 3}
 --- !u!114 &140305933487745410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,3 +225,4 @@ MonoBehaviour:
   maxEnergy: 3
   energyRegen: 1
   priority: 1
+  initiative: 0

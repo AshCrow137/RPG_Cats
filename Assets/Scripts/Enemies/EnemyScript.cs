@@ -17,8 +17,13 @@ public class EnemyScript : CharacterScript
         {
             enemyMovement.StartRandomMovement();
         }
-
+        GlobalEventManager.TurnManagerEvents.Event_StartCombat.AddListener(StopRandomMovement);
        
     }
+    private void StopRandomMovement()
 
+    {
+        
+        enemyMovement.StopRandomMovement();
+    }
 }

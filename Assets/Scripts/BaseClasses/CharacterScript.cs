@@ -12,6 +12,8 @@ public class CharacterScript : MonoBehaviour
 
     [SerializeField]
     protected BaseAbility[] abilityArray = new BaseAbility[3];
+    [SerializeField]
+    protected Sprite characterIcon;
 
     protected GameObject forwardObject;
     //protected CharacterScript attackTarget = null;
@@ -21,8 +23,11 @@ public class CharacterScript : MonoBehaviour
     protected Parameters parameters;
     protected List<CharacterScript> Enemylist = new List<CharacterScript>();
 
-   
+    
     protected IEnumerator AttackCoroutine; 
+
+    public Sprite GetCharacterIcon()
+    { return characterIcon; }
     protected virtual void Awake()
     {
 
@@ -236,5 +241,14 @@ public class CharacterScript : MonoBehaviour
     public Movement GetMovementScript()
     {
         return movementScript;
+    }
+    private void OnDestroy()
+    {
+        TurnManagerScript.Instance.RemoveFromCombatants(this);
+    }
+
+    public virtual void OnCharacterTurnStart()
+    {
+        print($"{name} turn was started");
     }
 }

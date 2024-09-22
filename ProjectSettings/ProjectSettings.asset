@@ -770,11 +770,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: 4897c4d3-7f5c-4fc7-993d-0636917ffa2b
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: RPG
+  organizationId: voronash
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

@@ -1,31 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class TurnManagerScript : MonoBehaviour
 {
-    [Serializable]
-    private struct CombatCharacter
-    {
-        private CharacterScript character;
-        public int initiative { get; private set; }
-
-        public CombatCharacter(CharacterScript c,int i)
-        {
-            character = c;
-            initiative = i;
-        }
-       
-    }
-
     public static TurnManagerScript Instance;
     private int CurrentRound;
 
     
-    private List<CombatCharacter> CombatCharacterList;
+    //private List<CombatCharacter> CombatCharacterList;
     private List<CombatCharacter> TurnOrderList;
+    public List<CombatCharacter> GetTurnOrderList() { return TurnOrderList; }
+
+    private bool bNextCharacter = false;
+
+    CancellationTokenSource cancellationTokenSource;
    // private Dictionary<CharacterScript,int> inBattleCharacters;
     private void Awake()
     {
@@ -40,20 +35,37 @@ public class TurnManagerScript : MonoBehaviour
         }
         GlobalEventManager.TurnManagerEvents.Event_StartCombat.AddListener(OnStartCombat);
         GlobalEventManager.TurnManagerEvents.Event_StopCombat.AddListener(OnEndCombat);
-        GlobalEventManager.TurnManagerEvents.Event_StartRound.AddListener(OnStartRound);
-        //inBattleCharacters = new Dictionary<CharacterScript, int>();
-        CombatCharacterList = new List<CombatCharacter>();
+        GlobalEventManager.TurnManagerEvents.Event_EndTurn.AddListener(OnEndTurn);
+        //GlobalEventManager.TurnManagerEvents.Event_StartRound.AddListener(OnStartRound);
+
     }
     public void AddToCombatants(CharacterScript character, int initiative)
     {
         
-        CombatCharacterList.Add(new CombatCharacter(character,initiative));
-        //inBattleCharacters.Add(character,initiative);
-        //Debug.Log($"{character.gameObject.name} added, initiative: {initiative}");
-        //foreach (KeyValuePair<CharacterScript, int> kvp in inBattleCharacters)
-        //{
-        //    Debug.Log($"{kvp.Key}:{kvp.Value}");
-        //}
+        TurnOrderList.Add(new CombatCharacter(character,initiative,UIManagerScript.Instance.CreateTurnOrderIconObject(character)));
+    }
+    public void InitiateCombat(CharacterScript initiator, List<CharacterScript> CombatCharacters)
+    {
+        TurnOrderList = new List<CombatCharacter>();
+        AddToCombatants(initiator,initiator.getCharacterParameters().GetInitiative());
+        CreateCombatCharacterList(CombatCharacters);
+        PrepareTurnOreder();
+        GlobalEventManager.TurnManagerEvents.FinishCombatPrepare(TurnOrderList);
+        StartNewRound();
+    }
+    public void CreateCombatCharacterList(List<CharacterScript> CombatCharacters)
+    {
+        
+        foreach (CharacterScript character in CombatCharacters)
+        {
+            AddToCombatants(character, character.getCharacterParameters().GetInitiative());
+        }
+
+    }
+
+    public void RemoveFromCombatants(CharacterScript character)
+    {
+        //TurnOrderList.Remove(character);
     }
     private void OnStartCombat()
     {
@@ -63,26 +75,70 @@ public class TurnManagerScript : MonoBehaviour
     }
     private void OnEndCombat()
     {
-        CombatCharacterList.Clear();
+        
+        TurnOrderList.Clear();
     }
-    private void OnStartRound()
+    private async void StartNewRound()
     {
         CurrentRound++;
-       
-        TurnOrderList = new List<CombatCharacter>();
-        for(int i = 0; i < CombatCharacterList.Count; i++)
+        GlobalEventManager.TurnManagerEvents.StartRound(CurrentRound);
+        cancellationTokenSource = new CancellationTokenSource();
+        try
         {
-            int minInit = i;
-            for(int j = i+1; j < CombatCharacterList.Count; j++) 
+            for(int i = 0;i< TurnOrderList.Count;i++)
             {
-                if (CombatCharacterList[j].initiative < CombatCharacterList[minInit].initiative)
+                CombatCharacter character = TurnOrderList[0];
+                StartNewTurn(character);
+                while (!bNextCharacter)
                 {
-                    minInit= j;
+                    await Task.Yield();
                 }
+                bNextCharacter = false;
             }
-            CombatCharacterList[i] = CombatCharacterList[minInit];
-            CombatCharacterList[minInit] = CombatCharacterList[i];
+                
+            
+                if(TurnOrderList.Count > 0)
+                {
+                    StartNewRound();
+                }
         }
+        catch (Exception ex) 
+        {
+            Debug.Log($"Task cancelled {ex}");
+            return;
+        }
+        finally
+        { 
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = null;
+        }
+
+       
+    }
+    private void OnEndTurn(CombatCharacter character)
+    {
+        bNextCharacter= true;
+        //CombatCharacter c = TurnOrderList[0];
+        TurnOrderList.Insert(TurnOrderList.Count,character);
+        TurnOrderList.RemoveAt(0);
+
+    }
+    private void StartNewTurn(CombatCharacter activeCharacter)
+    {
+        print($"Active character: {activeCharacter.character.name}");
+        GlobalEventManager.TurnManagerEvents.StartTurn(activeCharacter);
+        activeCharacter.StartCharacterTurn();
+    }
+    
+    private void PrepareTurnOreder()
+    {
+        
+        TurnOrderList = TurnOrderList.OrderByDescending((val) => val.initiative).ToList();
+    }
+
+    private void OnDestroy()
+    {
+        cancellationTokenSource?.Cancel();
     }
     #region BUTTONS
     //Только для кнопок, TODO убрать это к чертям

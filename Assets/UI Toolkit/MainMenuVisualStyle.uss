@@ -1,0 +1,115 @@
+.header {
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    flex-direction: column;
+    color: rgb(0, 0, 0);
+    -unity-font: url("project://database/Assets/ImportedAssets/Fonts/JazzCreateBubble.ttf?fileID=12800000&guid=58b647c5b2ec4184e9a07a561cdf0644&type=3#JazzCreateBubble");
+    -unity-font-style: normal;
+    width: 40%;
+    height: 20%;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    text-overflow: clip;
+    -unity-text-outline-width: 0;
+    -unity-font-definition: initial;
+    font-size: 180px;
+}
+
+.button {
+    background-image: url("project://database/Assets/ImportedAssets/Fantasy%20Wooden%20GUI%20%20Free/normal_ui_set%20A/TextBTN_Medium.png?fileID=21300000&guid=efee20b64d1e73942a29ba61ce3379c3&type=3#TextBTN_Medium");
+    width: 200px;
+    height: 80px;
+    font-size: 52px;
+    -unity-text-align: upper-center;
+    color: rgb(255, 255, 255);
+    -unity-text-outline-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    margin-top: 20px;
+    -unity-font: url("project://database/Assets/ImportedAssets/Fonts/JazzCreateBubble.ttf?fileID=12800000&guid=58b647c5b2ec4184e9a07a561cdf0644&type=3#JazzCreateBubble");
+    -unity-font-definition: initial;
+    -unity-text-outline-width: 0;
+    letter-spacing: 0;
+    word-spacing: 0;
+}
+
+.menuBackground {
+    width: 40%;
+    height: 80%;
+    background-image: url("project://database/Assets/ImportedAssets/Fantasy%20Wooden%20GUI%20%20Free/normal_ui_set%20A/UI%20board%20Large%20%20parchment.png?fileID=21300000&guid=43a7d98bd4222b64e933596512dc09ad&type=3#UI board Large  parchment");
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    padding-top: 60px;
+    padding-bottom: 100px;
+    -unity-background-scale-mode: stretch-to-fill;
+    rotate: 0;
+    background-color: rgba(255, 255, 255, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.buttonsBackground {
+    padding-top: 50px;
+    padding-bottom: 100px;
+}
+
+.button:hover {
+    background-image: url("project://database/Assets/ImportedAssets/Fantasy%20Wooden%20GUI%20%20Free/normal_ui_set%20A/TextBTN_Medium.png?fileID=21300000&guid=efee20b64d1e73942a29ba61ce3379c3&type=3#TextBTN_Medium");
+    width: 200px;
+    height: 80px;
+    -unity-text-align: middle-center;
+    color: rgb(255, 255, 255);
+    -unity-text-outline-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgb(65, 166, 72);
+    scale: 1.1 1.1;
+    font-size: 52px;
+}
+
+.button:active {
+    background-image: url("project://database/Assets/ImportedAssets/Fantasy%20Wooden%20GUI%20%20Free/normal_ui_set%20A/TextBTN_Medium_Pressed.png?fileID=21300000&guid=047b929beb10565479851d39b452dfb6&type=3#TextBTN_Medium_Pressed");
+    width: 200px;
+    height: 80px;
+    font-size: 52px;
+    -unity-text-align: lower-center;
+    color: rgb(255, 255, 255);
+    -unity-text-outline-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    scale: 1.1 1.1;
+}
+
+.settingsText {
+    font-size: 52px;
+    align-items: flex-start;
+}
+
+.settingsText.toggleButton {
+}

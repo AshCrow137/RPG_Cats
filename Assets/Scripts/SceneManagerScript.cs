@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class SceneManager : MonoBehaviour
+
+public class SceneManagerScript : MonoBehaviour
 {
     private PlayerScript playerScript;
-    public static SceneManager Instance { get; private set; }
+    public static SceneManagerScript Instance { get; private set; }
 
 
     private void Awake()
