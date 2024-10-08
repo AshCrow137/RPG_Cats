@@ -43,7 +43,9 @@ public class PlayerScript : CharacterScript
     protected override void OnStartCombat()
     {
         base.OnStartCombat();
-        TurnManagerScript.Instance.InitiateCombat(this, Enemylist);
+        TurnManagerScript.Instance.InitiateCombat(this, Enemylist);//TODO переделать чтобы не игрок инициировал сражение, а любой персонаж
+        //добавить область видимости для всех персонажей, не только игрока
+        // 
 
         //GlobalEventManager.TurnManagerEvents.StartRound();
     }

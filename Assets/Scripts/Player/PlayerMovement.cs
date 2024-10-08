@@ -16,8 +16,7 @@ public class PlayerMovement : Movement
     {
         if (Touch)
         {
-            movementDirection.x = FloatingJoystick.Instance.Horizontal;
-            movementDirection.y = FloatingJoystick.Instance.Vertical;
+            movementDirection = FloatingJoystick.Instance.Direction;
         }
         else
         {
