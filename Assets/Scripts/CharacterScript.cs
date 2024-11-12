@@ -84,7 +84,7 @@ public class CharacterScript : MonoBehaviour
             Debug.LogError("Invalid ability number");
         }
     }
-    protected virtual CharacterScript GetPossibleEnemy(List<CharacterScript> listOfTargets)
+    protected virtual CharacterScript GetClosestEnemy(List<CharacterScript> listOfTargets)
     {
         if (listOfTargets.Count != 0)
         {
@@ -112,16 +112,8 @@ public class CharacterScript : MonoBehaviour
                         newTarget = potentialTarget;
                     }
                 }
-                if(baseAttack.checkDistance(transform,newTarget.transform))
-                {
-                    print($"select {newTarget} as new target");
-                    return newTarget;
-                }
-                else 
-                {
-                    //startFollow?
-                    return null; 
-                }
+                return newTarget;
+ 
                 
             //}
 
@@ -130,8 +122,9 @@ public class CharacterScript : MonoBehaviour
         {
             return null;
         }
-
-
+    }
+    protected virtual void OnAttackCheckDistanceFailed(CharacterScript target)
+    {
 
     }
     protected virtual CharacterScript GetEnemyWithPriority(CharacterScript potentialEnemy)
@@ -163,7 +156,7 @@ public class CharacterScript : MonoBehaviour
         }
         Enemylist.Add(Enemy);
     }
-    public void RemoveEnemyFromEnemyList(CharacterScript Enemy)
+    public virtual void RemoveEnemyFromEnemyList(CharacterScript Enemy)
     {
         if (Enemylist.Contains(Enemy))
         {
@@ -193,7 +186,7 @@ public class CharacterScript : MonoBehaviour
                 {
                     StopBasicAttack(true);
                 }
-                RepeatAttackTarget = GetPossibleEnemy(Enemylist);
+                RepeatAttackTarget = GetClosestEnemy(Enemylist);
             }
             
         }
@@ -204,10 +197,20 @@ public class CharacterScript : MonoBehaviour
     }
     protected void CheckForTarget()
     {
-        CharacterScript attackTarget = GetPossibleEnemy(Enemylist);
+        CharacterScript attackTarget = GetClosestEnemy(Enemylist);
         if (attackTarget != null)
         {
-            BasicAttack(attackTarget);
+            if (baseAttack.checkDistance(transform, attackTarget.transform))
+            {
+                print($"select {attackTarget} as new target");
+                BasicAttack(attackTarget);
+            }
+            else
+            {
+                OnAttackCheckDistanceFailed(attackTarget);
+               
+            }
+            
         }
         else
         {

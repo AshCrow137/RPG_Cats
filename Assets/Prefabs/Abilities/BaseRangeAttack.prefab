@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1015812310634375012}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 303.19894, y: 229.95387, z: 0.9873795}
+  m_LocalPosition: {x: 303.1989, y: 229.9539, z: 0.9873795}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1204307028745511977
 MonoBehaviour:
@@ -47,5 +47,11 @@ MonoBehaviour:
   damage: 7
   cooldown: 1
   cost: 0
+  abilityExecutionType: 0
   executeTime: 0.1
   abilityDistance: 4
+  canBeInterrupted: 1
+  AbilityFinishedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  projectile: {fileID: 0}

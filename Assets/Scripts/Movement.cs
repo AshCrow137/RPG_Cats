@@ -1,5 +1,7 @@
+
 using UnityEngine;
 using UnityEngine.Events;
+
 
 public class Movement : MonoBehaviour
 {
@@ -64,7 +66,7 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            OnMovementFinished.Invoke();
+            OnMovementFinished?.Invoke();
 
         }
 
@@ -77,7 +79,7 @@ public class Movement : MonoBehaviour
         float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
         forwardObject.transform.eulerAngles = new Vector3(0, 0, -angle);
     }
-    public virtual void MoveToTarget(Vector3 target)
+    public virtual void MoveTo(Vector3 target)
     {
         
         Vector2 rotationDirection = new Vector2 (target.x, target.y) - new Vector2(transform.position.x, transform.position.y);
@@ -92,6 +94,15 @@ public class Movement : MonoBehaviour
 
         }
 
+    }
+    protected virtual void StopMove()
+    {
+        animationScript.UpdateMovement(0,0,0);
+        
+    }
+    public void InterceptMovement()
+    {
+        StopMove();
     }
     public ForwardObjectScript GetForwardObject()
     {

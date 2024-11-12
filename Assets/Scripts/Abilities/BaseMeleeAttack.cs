@@ -1,14 +1,11 @@
+using UnityEngine;
+
 public class BaseMeleeAttack : BaseAttack
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void Attack(GameObject source, GameObject target)
     {
+        base.Attack(source, target);
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        print("Attack");
     }
 }
