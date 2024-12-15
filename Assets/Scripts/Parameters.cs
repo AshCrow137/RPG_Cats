@@ -6,6 +6,7 @@ public class Parameters : MonoBehaviour
 
     // Health params
     [SerializeField]
+
     protected float health;
     [SerializeField]
     protected float maxHealth;
@@ -33,16 +34,24 @@ public class Parameters : MonoBehaviour
         EnergyRegeneration();
     }
 
-    public float getHealth()
+    public float  GetHealth()
     {
         return health;
     }
+   /// <summary>
+   /// minus is damage, plus is heal
+   /// </summary>
+   /// <param name="amount"></param>
     public void ChangeHealth(float amount)
     {
         health += amount;
         if (health > maxHealth)
         {
             health = maxHealth;
+        }
+        else if(health<0)
+        {
+            health = 0;
         }
     }
     public void changeEnergy(float amount)
@@ -65,4 +74,9 @@ public class Parameters : MonoBehaviour
     {
         return priority;
     }
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
 }

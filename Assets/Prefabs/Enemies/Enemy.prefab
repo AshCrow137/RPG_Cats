@@ -24,12 +24,12 @@ PrefabInstance:
     - target: {fileID: 923710152523840052, guid: 526e105e00cb498468ca83847ad71ab3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.574448
+      value: -9.24
       objectReference: {fileID: 0}
     - target: {fileID: 923710152523840052, guid: 526e105e00cb498468ca83847ad71ab3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.0860405
+      value: 7.44
       objectReference: {fileID: 0}
     - target: {fileID: 923710152523840052, guid: 526e105e00cb498468ca83847ad71ab3,
         type: 3}
@@ -90,6 +90,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AngularDrag
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8107757102922326592, guid: 526e105e00cb498468ca83847ad71ab3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2854363106152454053, guid: 526e105e00cb498468ca83847ad71ab3, type: 3}
@@ -234,6 +239,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  stateName: 
   RandomMovementDistance: 5
   WaitTime: 3
   InterruptTime: 10
@@ -279,6 +285,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8288536025065952751}
     m_Modifications:
+    - target: {fileID: 1148216923134902803, guid: 4e14109fd2f92d04fb7be4586487fe75,
+        type: 3}
+      propertyPath: damage
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1148216923134902803, guid: 4e14109fd2f92d04fb7be4586487fe75,
+        type: 3}
+      propertyPath: cooldown
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1148216923134902803, guid: 4e14109fd2f92d04fb7be4586487fe75,
+        type: 3}
+      propertyPath: executeTime
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 1644884349573716441, guid: 4e14109fd2f92d04fb7be4586487fe75,
         type: 3}
       propertyPath: m_LocalPosition.x

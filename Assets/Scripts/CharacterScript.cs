@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class CharacterScript : MonoBehaviour
 {
@@ -20,8 +21,10 @@ public class CharacterScript : MonoBehaviour
     protected Parameters parameters;
     protected List<CharacterScript> Enemylist = new List<CharacterScript>();
 
-   
+    protected AnimationScript animationScript;
     protected IEnumerator AttackCoroutine; 
+
+   
     protected virtual void Awake()
     {
 
@@ -31,13 +34,19 @@ public class CharacterScript : MonoBehaviour
         {
             Debug.LogError($" {this.name} has no attached movement");
         }
+        animationScript = GetComponent<AnimationScript>();
+        if (!animationScript)
+        {
+            Debug.LogError("Missing AnimationScript");
+        }
+
 
     }
     protected virtual int GetCharacterPriority()
     {
         return parameters.GetPriority();
     }
-    private void Start()
+    protected virtual void  Start()
     {
         forwardObject = GetComponentInChildren<ForwardObjectScript>().gameObject;
         if (!forwardObject)
@@ -58,8 +67,20 @@ public class CharacterScript : MonoBehaviour
     }
     public virtual void BasicAttack(CharacterScript target)
     {
-   
 
+        if (baseAttack != null)
+        {
+            if (!isAttacking)
+            {
+                AttackCoroutine = RepeatAttack(target);
+                StartCoroutine(AttackCoroutine);
+                
+            }
+        }
+        else
+        {
+            Debug.LogError($"there is no basic attack attached to {this.name}");
+        }
     }
 
     public void TriggerAbility(int number)
@@ -134,14 +155,18 @@ public class CharacterScript : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-
+        OnTakeDamage();    
         parameters.ChangeHealth(-damage);
-        float health = parameters.getHealth();
+        float health = parameters.GetHealth();
         if (health <= 0)
         {
-
+            
             KillCharacter();
         }
+
+    }
+    protected virtual void OnTakeDamage()
+    {
 
     }
     public virtual void KillCharacter()
@@ -162,6 +187,10 @@ public class CharacterScript : MonoBehaviour
         {
             Enemylist.Remove(Enemy);
         }
+        else
+        {
+            return;
+        }
     }
     public void TryToAttack()
     {
@@ -172,15 +201,20 @@ public class CharacterScript : MonoBehaviour
     protected IEnumerator RepeatAttack(CharacterScript RepeatAttackTarget)
     {
         isAttacking = true;
+        
         while (RepeatAttackTarget != null)
         {
+            movementScript.LookToTarget(RepeatAttackTarget.gameObject.transform.position);
             yield return null;
             if (baseAttack.CanActavateAbility()&&baseAttack.CanAttack())
-            {             
+            {
 
+                print("can attack");
                 if (baseAttack.checkDistance(transform, RepeatAttackTarget.transform))
                 {
+                    print("activate attack");
                     baseAttack.ActivateAbility(this.gameObject, RepeatAttackTarget.gameObject);
+                    
                 }
                 else
                 {
@@ -228,6 +262,14 @@ public class CharacterScript : MonoBehaviour
             TryToAttack();
         }
 
+    }
+    public void RunAttackAnimation (float animationAngle)
+    {
+        animationScript.runAttackAnimation(animationAngle);
+    }
+    public void StopAttackAnimation ()
+    {
+        animationScript.StopAttackAnimation();
     }
     public Movement GetMovementScript()
     {

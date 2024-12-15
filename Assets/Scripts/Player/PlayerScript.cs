@@ -8,6 +8,7 @@ public class PlayerScript : CharacterScript
     [SerializeField]
     private GameObject BasicAttackRadiusObject;
 
+    private IEnumerator damageCoroutine;
 
     [Inject]
     private void Constructor()
@@ -42,18 +43,7 @@ public class PlayerScript : CharacterScript
 
     public override void BasicAttack(CharacterScript target)
     {
-        if (baseAttack != null)
-        {
-            if (!isAttacking)
-            {
-                AttackCoroutine = RepeatAttack(target);
-                StartCoroutine(AttackCoroutine);
-            }
-        }
-        else
-        {
-            Debug.LogError($"there is no basic attack attached to {this.name}");
-        }
+       base.BasicAttack(target);
     }
     public override void AddEnemyToEnemyList(CharacterScript Enemy)
     {
@@ -66,6 +56,34 @@ public class PlayerScript : CharacterScript
     public BaseAbility[] GetAbilityList()
     {
         return abilityArray;
+    }
+    public override void KillCharacter()
+    {
+
+        print("Player is dead ");
+        transform.position = Vector3.zero;
+        parameters.ChangeHealth(parameters.GetMaxHealth());
+    }
+    protected override void OnTakeDamage()
+    {
+        if(damageCoroutine!=null)
+        {
+            return;
+        }
+
+        base.OnTakeDamage();
+        damageCoroutine = TakeDamageCoroutine();
+        StartCoroutine(damageCoroutine);
+    }
+    private IEnumerator TakeDamageCoroutine()
+    {
+        for(int i = 0;i<5; i++)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        }
+        damageCoroutine = null;
     }
 }
 

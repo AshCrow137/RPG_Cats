@@ -116,6 +116,11 @@ public class EnemyMovement : Movement
         
         RandomMovementDistance = randomMovementDistance;
         WaitTime = waitTime;
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+        }
+        
         movementCoroutine = RandomMovementTimer();
         StartCoroutine(movementCoroutine);
     }

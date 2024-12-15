@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,6 +23,9 @@ public class BaseAbility : MonoBehaviour
     [SerializeField]
     protected bool canBeInterrupted = true;
 
+    [SerializeField]
+    protected AudioClip[] abilitySounds;
+
     protected CharacterScript abilityOwner;
 
     //Private
@@ -33,7 +37,7 @@ public class BaseAbility : MonoBehaviour
     //public  UnityEvent AbilityReadyEvent = new UnityEvent();
     //public  UnityEvent AbilityExecutingEvent = new UnityEvent();
     public UnityEvent AbilityFinishedEvent = new UnityEvent();
-
+    protected AudioSource audioSource;
 
     #region UnityMethods
     private void Start()
@@ -56,6 +60,11 @@ public class BaseAbility : MonoBehaviour
           
       
 
+        }
+        audioSource = GetComponent<AudioSource>();
+        if(!audioSource)
+        {
+            Debug.LogError($"{gameObject} missing AudioSource component");
         }
     }
     protected virtual void OnCharacterMove()
@@ -125,6 +134,12 @@ public class BaseAbility : MonoBehaviour
                     OnFinishAbility();
                 }
                 
+                if(audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                }
+                audioSource.clip = GetRandomAbilitySound();
+                audioSource.Play();
 
             }
             else
@@ -226,6 +241,10 @@ public class BaseAbility : MonoBehaviour
     public float GetRestCooldownTime()
     {
         return RestCooldownTime;
+    }
+    public AudioClip GetRandomAbilitySound()
+    {
+        return abilitySounds[UnityEngine.Random.Range(0, abilitySounds.Length)];
     }
     #endregion
     private enum AbilityState

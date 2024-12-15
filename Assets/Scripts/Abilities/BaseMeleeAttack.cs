@@ -6,6 +6,13 @@ public class BaseMeleeAttack : BaseAttack
     {
         base.Attack(source, target);
 
-        print("Attack");
+        print($"Attack {target}");
+        CharacterScript targetCharacter = target.GetComponent<CharacterScript>();
+        if(!targetCharacter)
+        {
+            Debug.LogError($"{target} has no CharacterScript attached to it!");
+            return;
+        }
+        targetCharacter.TakeDamage(damage);
     }
 }

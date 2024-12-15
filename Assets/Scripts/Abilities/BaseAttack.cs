@@ -1,16 +1,9 @@
-using System.Collections;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
 
 public class BaseAttack : BaseAbility
 {
     private bool isAttacking = false;
-    //private bool startMoveToTarget = false;
     private bool canAttack;
-    //[SerializeField]
-    //private bool followTarget = true;
-
-    
 
 
     public override void ActivateAbility(GameObject source, GameObject Target)
@@ -21,43 +14,9 @@ public class BaseAttack : BaseAbility
         }
         base.ActivateAbility(source, Target);
         Attack(source, Target);
-        //Movement movement = source.GetComponent<Movement>();
-        //if (movement == null)
-        //{
-        //    Debug.LogError($"{this.gameObject} has no attachment Movement component!");
-        //    return;
-        //}
-
-        //if (checkDistance(source.transform,Target.transform))
-        //{
-
-        //    Attack(source, Target);
-
-        //}
-        //else if ( followTarget)
-        //{
-        //    if (!startMoveToTarget)
-        //    {
-        //        StartCoroutine(MoveTotarget(movement, source, Target));
-        //    }
-        //}
-        //else
-        //{
-            
-        //    abilityOwner.StopBasicAttack(true);
-        //}
-
+        
     }
-    //protected IEnumerator MoveTotarget(Movement movement,GameObject source, GameObject Target)
-    //{
-    //    startMoveToTarget = true;
-    //    while (!checkDistance(source.transform,Target.transform))
-    //    {
-    //        yield return null;
-    //        movement.MoveToTarget(Target.transform);
-    //    }
-    //    startMoveToTarget= false;
-    //}
+
     
     protected override void FixedUpdate()
     {
@@ -67,8 +26,12 @@ public class BaseAttack : BaseAbility
     }
     protected virtual void Attack(GameObject source, GameObject target)
     {
-        print($"Attack {target} for {damage}");
+
+        print($" {source} Attack {target} for {damage}");
+        //print(Vector3.Angle(source.transform.position, target.transform.position));
+        GameObject fo = abilityOwner.GetForwardObject();
         //TODO Animations 
+        abilityOwner.RunAttackAnimation(fo.transform.rotation.z);
 
     }
     protected override void ExecuteAbility()

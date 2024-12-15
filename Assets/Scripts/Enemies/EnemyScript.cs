@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyScript : CharacterScript
@@ -8,6 +9,7 @@ public class EnemyScript : CharacterScript
     private CharacterScript currentEnemy;
 
     public AI_FSMState currentState;
+    public string stateName;
     protected override void Awake()
     {
         base.Awake();
@@ -21,12 +23,13 @@ public class EnemyScript : CharacterScript
 
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base .Start();
         Fsm = new AI_FSM();
         Fsm.AddState(new AI_FSMState_Idle(Fsm));
         Fsm.AddState(new AI_FSMState_MoveToTarget(Fsm,this));
-        Fsm.AddState(new AI_FSMState_Attack(Fsm));
+        Fsm.AddState(new AI_FSMState_Attack(Fsm,this));
         Fsm.SetState<AI_FSMState_Idle>();
         
     }
@@ -38,6 +41,7 @@ public class EnemyScript : CharacterScript
     {
         Fsm.Update();
         currentState = Fsm.GetCurrentState();
+        stateName = currentState.GetType().Name;
     }
     protected override void OnAttackCheckDistanceFailed(CharacterScript target)
     {
@@ -56,16 +60,31 @@ public class EnemyScript : CharacterScript
     protected virtual void OnTargerSpotted(PlayerScript target)
     {
         currentEnemy = GetClosestEnemy(Enemylist);
+        
         Fsm.SetState<AI_FSMState_MoveToTarget>();
+        //gameObject.GetComponent<SpriteRenderer>().color = Color.red;
     }
     public override void RemoveEnemyFromEnemyList(CharacterScript Enemy)
     {
+        base.RemoveEnemyFromEnemyList(Enemy);
+
+        if(Enemy is not PlayerScript)
+        {
+           
+            return;
+        }
+       
         if(Enemy == currentEnemy)
         {
             currentEnemy = null;
+           
         }
-        base.RemoveEnemyFromEnemyList(Enemy);
-        
+        OnEnemyRemovedFromList(Enemy as PlayerScript);
+
+    }
+    protected virtual void OnEnemyRemovedFromList(PlayerScript enemy)
+    {
+      
     }
     public void StartFollowTarget()
     {
@@ -86,7 +105,7 @@ public class EnemyScript : CharacterScript
         else
         {
             enemyMovement.InterceptMovement();
-            //OnTargetReached();
+            OnTargetReached();
         }
     }
     public void StopFollowTarget()

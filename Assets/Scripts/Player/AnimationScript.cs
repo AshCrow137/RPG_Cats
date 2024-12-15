@@ -20,5 +20,19 @@ public class AnimationScript : MonoBehaviour
            
         }
     }
+    public void runAttackAnimation(float animationAngle)
+    {
+        //animator.SetBool("IsAttacking", true);
+        print(animationAngle);
+        animator.SetTrigger("AttackTrigger");
+        animator.SetFloat("AttackAngle", animationAngle);
+        
+    }
+    public void StopAttackAnimation()
+    {
+        //animator.SetBool("IsAttacking", false);
+
+    }
+
     public Animator GetAnimator() { return animator; }
 }

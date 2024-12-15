@@ -20,7 +20,13 @@ public class GoblinScript : EnemyScript
     public override void RemoveEnemyFromEnemyList(CharacterScript Enemy)
     {
         base.RemoveEnemyFromEnemyList(Enemy);
+
+    }
+    protected override void OnEnemyRemovedFromList(PlayerScript enemy)
+    {
+        base.OnEnemyRemovedFromList(enemy);
         Fsm.SetState<AI_FSMState_RandomMovement>();
+       // gameObject.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
 }

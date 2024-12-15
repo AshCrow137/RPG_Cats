@@ -2,24 +2,24 @@ using UnityEngine;
 
 public class AI_FSMState_MoveToTarget : AI_FSMState
 {
-    private EnemyScript EnemyScript;
-    public AI_FSMState_MoveToTarget(AI_FSM fsm,EnemyScript enemyScript) : base(fsm)
+    private EnemyScript OwnerScript;
+    public AI_FSMState_MoveToTarget(AI_FSM fsm,EnemyScript ownerScript) : base(fsm)
     {
-        EnemyScript = enemyScript;   
+        OwnerScript = ownerScript;   
     }
     public override void Enter()
     {
         base.Enter();
-        EnemyScript.StartFollowTarget();
+        OwnerScript.StartFollowTarget();
     }
     public override void Exit() 
     { 
         base.Exit();
-        EnemyScript.StopFollowTarget();
+        OwnerScript.StopFollowTarget();
     }
     public override void Update()
     {
         base.Update();
-        EnemyScript.FollowTarget();
+        OwnerScript.FollowTarget();
     }
 }

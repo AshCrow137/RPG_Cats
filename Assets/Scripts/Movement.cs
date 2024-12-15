@@ -95,6 +95,15 @@ public class Movement : MonoBehaviour
         }
 
     }
+    public void LookToTarget(Vector3 target)
+    {
+        Vector2 rotationDirection = new Vector2(target.x, target.y) - new Vector2(transform.position.x, transform.position.y);
+        if (rotationDirection != Vector2.zero)
+        {
+            RotateForwardObject(rotationDirection);
+            //animationScript.UpdateMovement(rotationDirection.x, rotationDirection.y, rotationDirection.sqrMagnitude);
+        }
+    }
     protected virtual void StopMove()
     {
         animationScript.UpdateMovement(0,0,0);
@@ -103,6 +112,7 @@ public class Movement : MonoBehaviour
     public void InterceptMovement()
     {
         StopMove();
+        OnMovementFinished?.Invoke();
     }
     public ForwardObjectScript GetForwardObject()
     {
