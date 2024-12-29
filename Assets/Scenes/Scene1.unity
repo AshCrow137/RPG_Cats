@@ -8336,7 +8336,7 @@ PrefabInstance:
     - target: {fileID: 8331705916716124729, guid: 900306b337bd56a45996475183427dcc,
         type: 3}
       propertyPath: abilitySounds.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

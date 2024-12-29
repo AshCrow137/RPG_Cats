@@ -4,7 +4,11 @@ public class ProjectileScript : MonoBehaviour
 {
 
 
-    [SerializeField] private float projectileSpeed = 5;
+    [SerializeField] 
+    private float projectileSpeed = 5;
+    [SerializeField]
+    protected AudioClip[] ProjectileHitSounds;
+    private AudioSource audioSource;
     //[SerializeField] private float angleChangingSpeed = 100;
     private float damage;
     private Rigidbody2D rb;
@@ -13,6 +17,7 @@ public class ProjectileScript : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
         Destroy(gameObject, 5);
     }
 
@@ -59,5 +64,9 @@ public class ProjectileScript : MonoBehaviour
             }
 
         }
+    }
+    private AudioClip GetRandomProjectileSound()
+    {
+        return ProjectileHitSounds[Random.Range(0, ProjectileHitSounds.Length)];
     }
 }
