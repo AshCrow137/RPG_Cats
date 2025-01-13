@@ -42,11 +42,14 @@ public class ButtonsManagerScript : MonoBehaviour
             }
 
         }
-        CooldownText.gameObject.SetActive(true);
-        CooldownImage.fillAmount = 1;
-        BasePlayerAbility activatedAbility = _abilities[AbilityNumber - 1] as BasePlayerAbility;
-        activatedAbility.AbilityFinishedEvent.AddListener(delegate { StartAbilityTimer(CooldownImage, CooldownText, activatedAbility); });
-        PlayerScript.Instance.TriggerAbility(AbilityNumber);
+       
+        if(PlayerScript.Instance.TriggerAbility(AbilityNumber))
+        {
+            CooldownText.gameObject.SetActive(true);
+            CooldownImage.fillAmount = 1;
+            BasePlayerAbility activatedAbility = _abilities[AbilityNumber - 1] as BasePlayerAbility;
+            activatedAbility.AbilityFinishedEvent.AddListener(delegate { StartAbilityTimer(CooldownImage, CooldownText, activatedAbility); });
+        }
         
         //AbilityDelegate= StartAbilityTimer(CooldownImage, CooldownText, activatedAbility);
         

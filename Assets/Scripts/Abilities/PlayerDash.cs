@@ -11,10 +11,7 @@ public class PlayerDash : BasePlayerAbility
     //public float getDashDistance() { return DashDistance; }
     //public void setDashDistance(float value) { DashDistance = value; }
 
-    private void Start()
-    {
 
-    }
     public void Dash()
     {
 
@@ -25,12 +22,12 @@ public class PlayerDash : BasePlayerAbility
         float rad = (forwardObject.transform.eulerAngles.z + 90) * Mathf.Deg2Rad;
 
         Vector2 target = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
-        float DashSpeed = abilityDistance / executeTime;
+        float DashSpeed = Distance / Duration;
         rb.MovePosition(rb.position + target.normalized * DashSpeed * Time.fixedDeltaTime);
 
     }
 
-    public override void ActivateAbility(GameObject source, GameObject Target)
+    public override bool ActivateAbility(GameObject source, GameObject Target)
     {
 
         rb = source.GetComponent<Rigidbody2D>();
@@ -39,6 +36,7 @@ public class PlayerDash : BasePlayerAbility
         if (movementScript == null)
         {
             Debug.LogError($"No movement script attached to {this.name}");
+            return false;
         }
         else
         {
@@ -48,8 +46,14 @@ public class PlayerDash : BasePlayerAbility
         if (rb == null)
         {
             Debug.LogError($"No Rigidbody2d attached to {this.name}");
+            return false;
         }
-        base.ActivateAbility(source, Target);
+        if( base.ActivateAbility(source, Target))
+        {
+            movementScript.ChangeMovementPossibility(false);
+            return true;
+        }
+        return false;
 
     }
     protected override void ExecuteAbility()
@@ -57,7 +61,7 @@ public class PlayerDash : BasePlayerAbility
 
         base.ExecuteAbility();
 
-        movementScript.ChangeMovementPossibility(false);
+        
         Dash();
 
 

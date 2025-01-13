@@ -3,39 +3,56 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 
-
+[RequireComponent(typeof(AudioSource))]
 public class BaseAbility : MonoBehaviour
 {
     //Protected
+    [Header("Ability targeting options")]
+    protected AbilityTargetingOptions tagert;
+    [Header("Ability parametres")]
     [SerializeField]
     protected float damage = 1f;
     [SerializeField]
     protected float cooldown;
-    private float RestCooldownTime;
     [SerializeField]
     protected int cost;
     [SerializeField]
+    protected float Duration;// instant if duration = 0
+    [SerializeField]
+    protected float Distance;
+    [Header("Ability type options")]
+    [SerializeField]
     private AbilityExecutionType abilityExecutionType;
-    [SerializeField]
-    protected float executeTime;
-    [SerializeField]
-    protected float abilityDistance;
-    [SerializeField]
-    protected bool canBeInterrupted = true;
 
     [SerializeField]
+    protected bool canBeInterrupted = true;
+ // bool has target, bool activable, 
+ // абилки в одну цель, абилки по шаблону (круг, линия, точка в пределах дистанции)
+
+    [Header("Ability sound options")]
+    [SerializeField]
     protected AudioClip[] abilitySounds;
+    [SerializeField]
+    protected AudioClip abilityActivationSound;
+    [SerializeField]
+    protected AudioClip abilityExecutionSound;
+    [SerializeField]
+    protected AudioClip abilityFinishedSound;
+    [Header("Ability visual options")]
+    [SerializeField]
+    protected Sprite AbilityIcon;
 
     protected CharacterScript abilityOwner;
 
     //Private
     private AbilityState abilityState;
     protected IEnumerator AbilityExecutionCoroutine;
-
+    private float RestCooldownTime;
 
     //Public
     //public  UnityEvent AbilityReadyEvent = new UnityEvent();
     //public  UnityEvent AbilityExecutingEvent = new UnityEvent();
+    [HideInInspector]
     public UnityEvent AbilityFinishedEvent = new UnityEvent();
     protected AudioSource audioSource;
 
@@ -85,6 +102,11 @@ public class BaseAbility : MonoBehaviour
     #region AbilityStates
     protected virtual void ExecuteAbility()
     {
+        if(abilityExecutionSound != null)
+        {
+            audioSource.clip = abilityExecutionSound;
+            audioSource.Play();
+        }
         //print($"execute {this.name}");
     }
     protected virtual void AbilityReady()
@@ -95,24 +117,29 @@ public class BaseAbility : MonoBehaviour
     protected virtual void OnFinishAbility()
     {
         //print($"execute {this.name} finished");
-
+        if(abilityFinishedSound!=null)
+        {
+            audioSource.clip = abilityFinishedSound;
+            audioSource.Play();
+        }
         StartCoroutine(AbilityCooldownTimer());
         AbilityFinishedEvent.Invoke();
     }
     #endregion
 
-    public virtual void ActivateAbility(GameObject source, GameObject Target)
+    public virtual bool ActivateAbility(GameObject source, GameObject Target)
     {
         Parameters activatorParams = source.GetComponent<Parameters>();
 
         if (activatorParams == null)
         {
             Debug.LogError($"{source.name} has no params");
-            return;
+            return false;
         }
         if (Target == null)
         {
             Debug.LogError($"{this.name} has no target!");
+            return false;
         }
         if (activatorParams.getEnergy() >= cost)
         {
@@ -140,19 +167,34 @@ public class BaseAbility : MonoBehaviour
                 }
                 audioSource.clip = GetRandomAbilitySound();
                 audioSource.Play();
-
+                return true;
             }
             else
             {
                 print("cooldown!");
+                return false;
             }
         }
         else
         {
             print("Not enought energy! ");
-            return;
+            return false;
         }
 
+    }
+
+
+    public Sprite GetAbilityIcon()
+    {
+        if (AbilityIcon)
+        {
+            return AbilityIcon;
+        }
+        else
+        {
+            Debug.LogError($"{gameObject.name} ability missing ability icon! ");
+            return null;
+        }
     }
     #region AbilityStats
     public float getCooldown() { return cooldown; }
@@ -188,7 +230,7 @@ public class BaseAbility : MonoBehaviour
     {
         abilityState = AbilityState.Executing;
         float t = 0;
-        while (t <= executeTime)
+        while (t <= Duration)
         {
             ExecuteAbility();
             t += Time.deltaTime;
@@ -236,7 +278,7 @@ public class BaseAbility : MonoBehaviour
     }
     public float GetAbilityDistance()
     {
-        return abilityDistance;
+        return Distance;
     }
     public float GetRestCooldownTime()
     {
@@ -258,5 +300,10 @@ public class BaseAbility : MonoBehaviour
     {
         Single,
         Continuous
+    }
+    protected enum AbilityTargetingOptions
+    {
+        OneTarget,
+        Tamplate
     }
 }

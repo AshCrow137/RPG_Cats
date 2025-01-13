@@ -42,7 +42,7 @@ public class Parameters : MonoBehaviour
    /// minus is damage, plus is heal
    /// </summary>
    /// <param name="amount"></param>
-    public void ChangeHealth(float amount)
+    public virtual void ChangeHealth(float amount)
     {
         health += amount;
         if (health > maxHealth)
@@ -54,7 +54,7 @@ public class Parameters : MonoBehaviour
             health = 0;
         }
     }
-    public void changeEnergy(float amount)
+    public virtual void changeEnergy(float amount)
     {
         energy += amount;
         if (energy > maxEnergy)

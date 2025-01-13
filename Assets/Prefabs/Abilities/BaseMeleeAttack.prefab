@@ -48,14 +48,18 @@ MonoBehaviour:
   damage: 1
   cooldown: 3
   cost: 0
+  Duration: 0.1
+  Distance: 1
   abilityExecutionType: 0
-  executeTime: 0.1
-  abilityDistance: 1.5
   canBeInterrupted: 1
   abilitySounds:
   - {fileID: 8300000, guid: 91663f0f33489bc47894143f91a730fc, type: 3}
   - {fileID: 8300000, guid: 00672716c2216ba46989b14ab9760fd1, type: 3}
   - {fileID: 8300000, guid: c4953a9d419832543a950503aa41ddce, type: 3}
+  abilityActivationSound: {fileID: 0}
+  abilityExecutionSound: {fileID: 0}
+  abilityFinishedSound: {fileID: 0}
+  AbilityIcon: {fileID: 0}
   AbilityFinishedEvent:
     m_PersistentCalls:
       m_Calls: []

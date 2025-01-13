@@ -6,14 +6,18 @@ public class BaseAttack : BaseAbility
     private bool canAttack;
 
 
-    public override void ActivateAbility(GameObject source, GameObject Target)
+    public override bool ActivateAbility(GameObject source, GameObject Target)
     {
         if (!canAttack)
         {
-            return;
+            return false;
         }
-        base.ActivateAbility(source, Target);
-        Attack(source, Target);
+        if(base.ActivateAbility(source, Target))
+        {
+            Attack(source, Target);
+            return true;
+        }
+        return false;
         
     }
 
@@ -72,7 +76,7 @@ public class BaseAttack : BaseAbility
     public bool checkDistance(Transform source, Transform target)
     {
         float distance = Vector2.Distance(source.position, target.position);
-        if (distance <= abilityDistance)
+        if (distance <= Distance)
         {
             return true;
         }

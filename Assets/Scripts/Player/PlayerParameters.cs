@@ -9,4 +9,15 @@ public class PlayerParameters : Parameters
     {
         return followTarget;
     }
+    public override void ChangeHealth(float amount)
+    {
+        base.ChangeHealth(amount);
+        GlobalEventManager.InvokeHealthChangeEvent(health, maxHealth);
+    }
+    public override void changeEnergy(float amount)
+    {
+        base.changeEnergy(amount);
+        GlobalEventManager.InvokeEnergyChangeEvent(energy, maxEnergy);
+    }
+
 }

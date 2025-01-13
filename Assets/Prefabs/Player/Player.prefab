@@ -368,8 +368,8 @@ MonoBehaviour:
   health: 0
   maxHealth: 100
   energy: 0
-  maxEnergy: 100
-  energyRegen: 10
+  maxEnergy: 20
+  energyRegen: 1
   priority: 1
   followTarget: 1
 --- !u!114 &3092169736238541005
@@ -514,6 +514,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1506357949673797567}
     m_Modifications:
+    - target: {fileID: -5833065134365999575, guid: f43cf8bb399bfda4787e4f48492fecb3,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.393
+      objectReference: {fileID: 0}
+    - target: {fileID: -5833065134365999575, guid: f43cf8bb399bfda4787e4f48492fecb3,
+        type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 522496068130709930, guid: f43cf8bb399bfda4787e4f48492fecb3,
         type: 3}
       propertyPath: m_RootOrder

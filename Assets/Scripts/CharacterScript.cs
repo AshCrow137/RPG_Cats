@@ -83,7 +83,7 @@ public class CharacterScript : MonoBehaviour
         }
     }
 
-    public void TriggerAbility(int number)
+    public bool  TriggerAbility(int number)
     {
         Debug.Log("Activate ability");
 
@@ -93,7 +93,13 @@ public class CharacterScript : MonoBehaviour
             if (ability != null)
             {
 
-                ability.ActivateAbility(this.gameObject, ability.GetTarget()); //Задаем в качестве цели объект активирующий абилку. Если нужна конкретная цель, переписываем ее в самой абилке
+                if(ability.ActivateAbility(this.gameObject, ability.GetTarget()))
+                {
+                    return true;
+                }
+                
+                //Задаем в качестве цели объект активирующий абилку. Если нужна конкретная цель, переписываем ее в самой абилке
+
             }
             else
             {
@@ -104,6 +110,7 @@ public class CharacterScript : MonoBehaviour
         {
             Debug.LogError("Invalid ability number");
         }
+        return false;
     }
     protected virtual CharacterScript GetClosestEnemy(List<CharacterScript> listOfTargets)
     {

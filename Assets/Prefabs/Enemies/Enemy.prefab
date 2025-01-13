@@ -292,6 +292,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1148216923134902803, guid: 4e14109fd2f92d04fb7be4586487fe75,
         type: 3}
+      propertyPath: Distance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1148216923134902803, guid: 4e14109fd2f92d04fb7be4586487fe75,
+        type: 3}
+      propertyPath: Duration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1148216923134902803, guid: 4e14109fd2f92d04fb7be4586487fe75,
+        type: 3}
       propertyPath: cooldown
       value: 1.5
       objectReference: {fileID: 0}

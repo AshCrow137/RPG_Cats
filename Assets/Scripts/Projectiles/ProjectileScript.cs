@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ProjectileScript : MonoBehaviour
@@ -39,11 +40,11 @@ public class ProjectileScript : MonoBehaviour
         {
             MoveToTarget();
         }
-        else
-        {
-            //Debug.LogError($"No valid target for projectile!");
-            Destroy(this.gameObject);
-        }
+        //else
+        //{
+        //    //Debug.LogError($"No valid target for projectile!");
+        //    Destroy(this.gameObject);
+        //}
     }
 
     private void MoveToTarget()
@@ -60,10 +61,23 @@ public class ProjectileScript : MonoBehaviour
             if (character.gameObject == projectileTarget)
             {
                 character.TakeDamage(damage);
-                Destroy(this.gameObject);
+                audioSource.clip = GetRandomProjectileSound();
+                audioSource.Play();
+                gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                StartCoroutine(SoundCoroutine());
             }
 
         }
+    }
+    private IEnumerator SoundCoroutine()
+    {
+        while (audioSource.isPlaying)
+        {
+            yield return null;
+        }
+        Destroy(this.gameObject);
+
     }
     private AudioClip GetRandomProjectileSound()
     {
