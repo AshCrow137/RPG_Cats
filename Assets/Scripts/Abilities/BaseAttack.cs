@@ -76,12 +76,12 @@ public class BaseAttack : BaseAbility
     public bool checkDistance(Transform source, Transform target)
     {
         float distance = Vector2.Distance(source.position, target.position);
-        if (distance <= Distance)
+        if (distance <= base.distance)
         {
             return true;
         }
         else
-        {   
+        {
             print("Too far!");
             return false;
 

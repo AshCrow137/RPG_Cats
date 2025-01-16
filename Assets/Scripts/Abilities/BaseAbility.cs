@@ -8,6 +8,9 @@ public class BaseAbility : MonoBehaviour
 {
     //Protected
     [Header("Ability targeting options")]
+    [SerializeField]
+    protected bool hasTarget = true;
+    [SerializeField]
     protected AbilityTargetingOptions tagert;
     [Header("Ability parametres")]
     [SerializeField]
@@ -17,9 +20,11 @@ public class BaseAbility : MonoBehaviour
     [SerializeField]
     protected int cost;
     [SerializeField]
-    protected float Duration;// instant if duration = 0
+    protected float duration;// instant if duration = 0
     [SerializeField]
-    protected float Distance;
+    protected float distance;
+    [SerializeField]
+    protected float castTime;
     [Header("Ability type options")]
     [SerializeField]
     private AbilityExecutionType abilityExecutionType;
@@ -43,10 +48,12 @@ public class BaseAbility : MonoBehaviour
     protected Sprite AbilityIcon;
 
     protected CharacterScript abilityOwner;
+    protected IEnumerator AbilityExecutionCoroutine;
+    protected IEnumerator AbilityCastingCoroutine;
 
     //Private
     private AbilityState abilityState;
-    protected IEnumerator AbilityExecutionCoroutine;
+  
     private float RestCooldownTime;
 
     //Public
@@ -57,7 +64,7 @@ public class BaseAbility : MonoBehaviour
     protected AudioSource audioSource;
 
     #region UnityMethods
-    private void Start()
+    protected virtual void Start()
     {
         abilityState = AbilityState.Ready;
         abilityOwner = GetComponentInParent<CharacterScript>();
@@ -150,17 +157,16 @@ public class BaseAbility : MonoBehaviour
                 
                 activatorParams.changeEnergy(-cost);
                 //AbilityExecutingEvent.Invoke();
-                if (abilityExecutionType == AbilityExecutionType.Continuous)
+                if(castTime>0)
                 {
-                    AbilityExecutionCoroutine = AbilityExecuteTimer();
-                    StartCoroutine(AbilityExecutionCoroutine);
+                    AbilityCastingCoroutine = AbilityCastingTimer();
+                    StartCoroutine(AbilityCastingCoroutine);
                 }
-                else if( abilityExecutionType == AbilityExecutionType.Single ) 
-                { 
-                    ExecuteAbility();
-                    OnFinishAbility();
+                else
+                {
+                    TryToExecuteAbility();
                 }
-                
+              
                 if(audioSource.isPlaying)
                 {
                     audioSource.Stop();
@@ -182,8 +188,30 @@ public class BaseAbility : MonoBehaviour
         }
 
     }
+    private void TryToExecuteAbility()
+    {
+        if (abilityExecutionType == AbilityExecutionType.Continuous)
+        {
+            AbilityExecutionCoroutine = AbilityExecuteTimer();
+            StartCoroutine(AbilityExecutionCoroutine);
+        }
+        else if (abilityExecutionType == AbilityExecutionType.Instant)
+        {
+            ExecuteAbility();
+            OnFinishAbility();
+        }
 
+    }
+    public void InterruptAbility()
+    {
+        if(canBeInterrupted)
+        {
+            StopCoroutine(AbilityCastingCoroutine);
+            StartCoroutine(AbilityCooldownTimer());
+        }
+    }
 
+    #region AbilityStats
     public Sprite GetAbilityIcon()
     {
         if (AbilityIcon)
@@ -196,7 +224,6 @@ public class BaseAbility : MonoBehaviour
             return null;
         }
     }
-    #region AbilityStats
     public float getCooldown() { return cooldown; }
     public int getCost() { return cost; }
     public void changeCost(int value)
@@ -223,6 +250,18 @@ public class BaseAbility : MonoBehaviour
     {
         return this.gameObject;
     }
+    public float GetAbilityDistance()
+    {
+        return distance;
+    }
+    public float GetRestCooldownTime()
+    {
+        return RestCooldownTime;
+    }
+    public AudioClip GetRandomAbilitySound()
+    {
+        return abilitySounds[UnityEngine.Random.Range(0, abilitySounds.Length)];
+    }
     #endregion
     #region Timers
 
@@ -230,7 +269,7 @@ public class BaseAbility : MonoBehaviour
     {
         abilityState = AbilityState.Executing;
         float t = 0;
-        while (t <= Duration)
+        while (t <= duration)
         {
             ExecuteAbility();
             t += Time.deltaTime;
@@ -239,6 +278,16 @@ public class BaseAbility : MonoBehaviour
 
         OnFinishAbility();
 
+    }
+    protected IEnumerator AbilityCastingTimer()
+    {
+        abilityState = AbilityState.Casting;
+        float t = 0;
+        while(t <= castTime)
+        {
+            yield return null;
+        }
+        TryToExecuteAbility();
     }
     protected IEnumerator AbilityCooldownTimer()
     {
@@ -276,34 +325,24 @@ public class BaseAbility : MonoBehaviour
             abilityState = AbilityState.Ready;
         }
     }
-    public float GetAbilityDistance()
-    {
-        return Distance;
-    }
-    public float GetRestCooldownTime()
-    {
-        return RestCooldownTime;
-    }
-    public AudioClip GetRandomAbilitySound()
-    {
-        return abilitySounds[UnityEngine.Random.Range(0, abilitySounds.Length)];
-    }
+ 
     #endregion
     private enum AbilityState
     {
         Ready,
+        Casting,
         Executing,
         Cooldown,
         Disabled
     }
     private enum AbilityExecutionType
     {
-        Single,
+        Instant,
         Continuous
     }
     protected enum AbilityTargetingOptions
     {
         OneTarget,
-        Tamplate
+        Template
     }
 }

@@ -16,13 +16,13 @@ public class PlayerDash : BasePlayerAbility
     {
 
         //rb.velocity = rb.velocity * DashDistance;
-        Vector3 FOpos = forwardObject.gameObject.transform.localPosition;
+        Vector3 FOpos = AbilityTemplate.gameObject.transform.localPosition;
         //Vector2 target = new Vector2 ( FOpos.x, FOpos.y) ;
         //Vector2 target = movementScript.getMovement();
-        float rad = (forwardObject.transform.eulerAngles.z + 90) * Mathf.Deg2Rad;
+        float rad = (AbilityTemplate.transform.eulerAngles.z + 90) * Mathf.Deg2Rad;
 
         Vector2 target = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
-        float DashSpeed = Distance / Duration;
+        float DashSpeed = distance / duration;
         rb.MovePosition(rb.position + target.normalized * DashSpeed * Time.fixedDeltaTime);
 
     }
