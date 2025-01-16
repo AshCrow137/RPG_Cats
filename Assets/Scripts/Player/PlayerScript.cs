@@ -30,15 +30,7 @@ public class PlayerScript : CharacterScript
       
 
     }
-    public void DrawBasicAttackRadius()
-    {
-        BasicAttackRadiusObject.transform.localScale = new Vector3(baseAttack.GetAbilityDistance(), baseAttack.GetAbilityDistance(), 1);
-        BasicAttackRadiusObject.SetActive(true);
-    }
-    public void StopDrawAttackRadius()
-    {
-        BasicAttackRadiusObject.SetActive(false);
-    }
+    
 
 
     public override void BasicAttack(CharacterScript target)

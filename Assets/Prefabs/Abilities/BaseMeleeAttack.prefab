@@ -45,11 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7858fc8ccab2a342af26fdc71e65e0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasTarget: 0
+  tagert: 0
   damage: 1
   cooldown: 3
   cost: 0
-  Duration: 0.1
-  Distance: 1
+  duration: 0
+  distance: 1
+  castTime: 0
   abilityExecutionType: 0
   canBeInterrupted: 1
   abilitySounds:

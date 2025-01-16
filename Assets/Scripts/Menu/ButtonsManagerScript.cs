@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 
 public class ButtonsManagerScript : MonoBehaviour
@@ -16,6 +17,12 @@ public class ButtonsManagerScript : MonoBehaviour
 
     private delegate void StartAbilityTimerDelegate(Image cdImage, TextMeshProUGUI cdText, BaseAbility ability);
     StartAbilityTimerDelegate AbilityDelegate;
+    private BasePlayerAbility selectedAbility;
+
+    private bool cancelAbility = false;
+
+    private Joystick abilityJoystick;
+   
     //public ButtonsManagerScript(BaseAbility[] abilities) 
     //{
     //    print("Constuctor");
@@ -56,8 +63,49 @@ public class ButtonsManagerScript : MonoBehaviour
 
 
     }
+  
 
+    public void OnDragDelegate(BaseEventData data )
+    {
+        
+        Debug.Log("Dragging.");
+        abilityJoystick.OnDrag(data as PointerEventData);
+        Vector2 direction = abilityJoystick.Direction;
+        selectedAbility.RotateAbilityTemplate(direction);
+    }
+    public void SelectAbility(int abilityNumber)
+    {
+        
+            selectedAbility = _abilities[abilityNumber - 1] as BasePlayerAbility;
+            DrawAbilityDistance();
+        
+        
+    }
+    public void DeselectAbility() 
+    { 
+        
+        StopDrawAbilityDistance();
+        
+    }
 
+    public void DrawAbilityTemplate(Joystick selectedAbilityJoystick)
+    {
+        print("draw template");
+        abilityJoystick = selectedAbilityJoystick;
+        selectedAbility?.DrawAbilityTemplate();
+        abilityJoystick.gameObject.SetActive(true);
+    }
+    public void StopDrawingAbilityTemplate(int abilityNumber)
+    {
+        print("stop drawing template");
+        print(selectedAbility);
+        selectedAbility?.StopDrawingAbilityTemplate();
+        abilityJoystick.gameObject.SetActive(false);
+        if (!cancelAbility)
+        {
+            ActivateAbility(abilityNumber);
+        }
+    }
     private void Awake()
     {
 
@@ -114,13 +162,13 @@ public class ButtonsManagerScript : MonoBehaviour
     {
         PlayerScript.Instance.TryToAttack();
     }
-    public void DrawAttackRadius()
+    private void DrawAbilityDistance( )
     {
-        PlayerScript.Instance.DrawBasicAttackRadius();
+        selectedAbility?.DrawAbilityDistance();
     }
-    public void StopDrawAttackRadius()
+    private void StopDrawAbilityDistance()
     {
-        PlayerScript.Instance.StopDrawAttackRadius();
+        selectedAbility?.StopDrawingAbilityDistance ();
     }
     public void ShowElement(GameObject UIElement)
     {
