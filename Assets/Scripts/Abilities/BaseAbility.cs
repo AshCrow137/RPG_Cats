@@ -11,7 +11,7 @@ public class BaseAbility : MonoBehaviour
     [SerializeField]
     protected bool hasTarget = true;
     [SerializeField]
-    protected AbilityTargetingOptions tagert;
+    protected AbilityTargetingOptions tagertOption;
     [Header("Ability parametres")]
     [SerializeField]
     protected float damage = 1f;
@@ -171,8 +171,13 @@ public class BaseAbility : MonoBehaviour
                 {
                     audioSource.Stop();
                 }
-                audioSource.clip = GetRandomAbilitySound();
-                audioSource.Play();
+                AudioClip audioClip = GetRandomAbilitySound();
+                if (true)
+                {
+                    audioSource.clip = audioClip;
+                    audioSource.Play();
+                }
+                
                 return true;
             }
             else
@@ -197,6 +202,7 @@ public class BaseAbility : MonoBehaviour
         }
         else if (abilityExecutionType == AbilityExecutionType.Instant)
         {
+            print("try to execute instant ability");
             ExecuteAbility();
             OnFinishAbility();
         }
@@ -260,7 +266,11 @@ public class BaseAbility : MonoBehaviour
     }
     public AudioClip GetRandomAbilitySound()
     {
-        return abilitySounds[UnityEngine.Random.Range(0, abilitySounds.Length)];
+        if(abilitySounds.Length > 0)
+        {
+            return abilitySounds[UnityEngine.Random.Range(0, abilitySounds.Length)];
+        }
+        else return null;
     }
     #endregion
     #region Timers

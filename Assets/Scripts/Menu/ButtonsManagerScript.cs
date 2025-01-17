@@ -49,13 +49,14 @@ public class ButtonsManagerScript : MonoBehaviour
             }
 
         }
-       
-        if(PlayerScript.Instance.TriggerAbility(AbilityNumber))
+        BasePlayerAbility activatedAbility = _abilities[AbilityNumber - 1] as BasePlayerAbility;
+        activatedAbility.AbilityFinishedEvent.AddListener(delegate { StartAbilityTimer(CooldownImage, CooldownText, activatedAbility); });
+        if (PlayerScript.Instance.TriggerAbility(AbilityNumber))
         {
             CooldownText.gameObject.SetActive(true);
             CooldownImage.fillAmount = 1;
-            BasePlayerAbility activatedAbility = _abilities[AbilityNumber - 1] as BasePlayerAbility;
-            activatedAbility.AbilityFinishedEvent.AddListener(delegate { StartAbilityTimer(CooldownImage, CooldownText, activatedAbility); });
+            
+  
         }
         
         //AbilityDelegate= StartAbilityTimer(CooldownImage, CooldownText, activatedAbility);
@@ -63,15 +64,18 @@ public class ButtonsManagerScript : MonoBehaviour
 
 
     }
-  
 
+   
     public void OnDragDelegate(BaseEventData data )
     {
+        if(abilityJoystick.isActiveAndEnabled)
+        {
+            
+            abilityJoystick.OnDrag(data as PointerEventData);
+            Vector2 direction = abilityJoystick.Direction;
+            selectedAbility.RotateAbilityTemplate(direction);
+        }
         
-        Debug.Log("Dragging.");
-        abilityJoystick.OnDrag(data as PointerEventData);
-        Vector2 direction = abilityJoystick.Direction;
-        selectedAbility.RotateAbilityTemplate(direction);
     }
     public void SelectAbility(int abilityNumber)
     {
@@ -90,17 +94,20 @@ public class ButtonsManagerScript : MonoBehaviour
 
     public void DrawAbilityTemplate(Joystick selectedAbilityJoystick)
     {
-        print("draw template");
+     
         abilityJoystick = selectedAbilityJoystick;
-        selectedAbility?.DrawAbilityTemplate();
-        abilityJoystick.gameObject.SetActive(true);
+        if(selectedAbility.DrawAbilityTemplate(true))
+        {
+            abilityJoystick.gameObject.SetActive(true);
+        }
+        
     }
     public void StopDrawingAbilityTemplate(int abilityNumber)
     {
-        print("stop drawing template");
-        print(selectedAbility);
-        selectedAbility?.StopDrawingAbilityTemplate();
-        abilityJoystick.gameObject.SetActive(false);
+        if (selectedAbility.DrawAbilityTemplate(false))
+        {
+            abilityJoystick.gameObject.SetActive(false);
+        }
         if (!cancelAbility)
         {
             ActivateAbility(abilityNumber);
@@ -140,8 +147,10 @@ public class ButtonsManagerScript : MonoBehaviour
     }
     private void StartAbilityTimer(Image cdImage, TextMeshProUGUI cdText, BaseAbility ability)
     {
+        
         StartCoroutine(StartButtonCooldownCoroutine(cdImage, cdText, ability)); 
         ability.AbilityFinishedEvent.RemoveAllListeners();
+       
     }
 
     private IEnumerator StartButtonCooldownCoroutine(Image cdImage, TextMeshProUGUI cdText, BaseAbility ability)

@@ -24,14 +24,18 @@ public class BasePlayerAbility : BaseAbility
     {
         AbilityDistance?.SetActive(false);
     }
-    public void DrawAbilityTemplate()
+    public bool DrawAbilityTemplate(bool draw)
+        
     {
-        AbilityTemplate?.SetActive(true);
+        if(hasTarget&&tagertOption==AbilityTargetingOptions.Template)
+        {
+            AbilityTemplate?.SetActive(draw);
+            return true;
+        }
+        return false;
     }
-    public void StopDrawingAbilityTemplate()
-    {
-        AbilityTemplate?.SetActive(false);
-    }
+
+    
     public void RotateAbilityTemplate(Vector2 direction)
     {
         float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;

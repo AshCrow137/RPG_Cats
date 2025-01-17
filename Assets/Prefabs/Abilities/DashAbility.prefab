@@ -32,7 +32,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8902441059774237224}
-  - {fileID: 8867103408589236037}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8179652072177303948
@@ -47,8 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d6b60b36e8c75c4d947eaaf2d4fdd17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasTarget: 0
-  tagert: 0
+  hasTarget: 1
+  tagertOption: 1
   damage: 1
   cooldown: 3
   cost: 7
@@ -180,7 +179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8902441059774237224
 Transform:
   m_ObjectHideFlags: 0
@@ -191,9 +190,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 8867103408589236037}
   m_Father: {fileID: 1344555242861842030}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1960319544177310539
@@ -356,11 +356,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7277957476045001341}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8040042271527958400}
-  m_Father: {fileID: 1344555242861842030}
+  m_Father: {fileID: 8902441059774237224}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
