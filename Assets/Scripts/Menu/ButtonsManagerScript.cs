@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using UnityEngine.Events;
 
 public class ButtonsManagerScript : MonoBehaviour
 {
@@ -22,6 +22,7 @@ public class ButtonsManagerScript : MonoBehaviour
     private bool cancelAbility = false;
 
     private Joystick abilityJoystick;
+    private UnityAction abilityFinishedDelegate;
    
     //public ButtonsManagerScript(BaseAbility[] abilities) 
     //{
@@ -50,9 +51,11 @@ public class ButtonsManagerScript : MonoBehaviour
 
         }
         BasePlayerAbility activatedAbility = _abilities[AbilityNumber - 1] as BasePlayerAbility;
-        activatedAbility.AbilityFinishedEvent.AddListener(delegate { StartAbilityTimer(CooldownImage, CooldownText, activatedAbility); });
+        
         if (PlayerScript.Instance.TriggerAbility(AbilityNumber))
         {
+            abilityFinishedDelegate = delegate { StartAbilityTimer(CooldownImage, CooldownText, activatedAbility); };
+            activatedAbility.AbilityFinishedEvent.AddListener(abilityFinishedDelegate);
             CooldownText.gameObject.SetActive(true);
             CooldownImage.fillAmount = 1;
             
@@ -79,9 +82,10 @@ public class ButtonsManagerScript : MonoBehaviour
     }
     public void SelectAbility(int abilityNumber)
     {
-        
-            selectedAbility = _abilities[abilityNumber - 1] as BasePlayerAbility;
-            DrawAbilityDistance();
+
+        cancelAbility = false;
+        selectedAbility = _abilities[abilityNumber - 1] as BasePlayerAbility;
+        DrawAbilityDistance();
         
         
     }
@@ -112,6 +116,14 @@ public class ButtonsManagerScript : MonoBehaviour
         {
             ActivateAbility(abilityNumber);
         }
+    }
+    public void CancelAbility()
+    {
+        cancelAbility=true;
+    }
+    public void DecancelAbility()
+    {
+        cancelAbility=false;
     }
     private void Awake()
     {
@@ -149,7 +161,7 @@ public class ButtonsManagerScript : MonoBehaviour
     {
         
         StartCoroutine(StartButtonCooldownCoroutine(cdImage, cdText, ability)); 
-        ability.AbilityFinishedEvent.RemoveAllListeners();
+       
        
     }
 
@@ -165,6 +177,7 @@ public class ButtonsManagerScript : MonoBehaviour
             yield return null;
         }
         cdText.gameObject.SetActive(false);
+        ability.AbilityFinishedEvent.RemoveListener(abilityFinishedDelegate);
     }
 
     public void ActivateBasicAttack()

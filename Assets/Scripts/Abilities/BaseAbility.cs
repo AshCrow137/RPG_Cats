@@ -27,12 +27,15 @@ public class BaseAbility : MonoBehaviour
     protected float castTime;
     [Header("Ability type options")]
     [SerializeField]
-    private AbilityExecutionType abilityExecutionType;
+    protected AbilityExecutionType abilityExecutionType;
 
     [SerializeField]
     protected bool canBeInterrupted = true;
- // bool has target, bool activable, 
- // абилки в одну цель, абилки по шаблону (круг, линия, точка в пределах дистанции)
+    [SerializeField]
+    protected bool canMoveWhileCastiong = false;
+    // bool has target, bool activable, 
+    // bool has target, bool activable, 
+    // абилки в одну цель, абилки по шаблону (круг, линия, точка в пределах дистанции)
 
     [Header("Ability sound options")]
     [SerializeField]
@@ -63,11 +66,14 @@ public class BaseAbility : MonoBehaviour
     public UnityEvent AbilityFinishedEvent = new UnityEvent();
     protected AudioSource audioSource;
 
+    protected Parameters ownerParameters;
+
     #region UnityMethods
     protected virtual void Start()
     {
         abilityState = AbilityState.Ready;
         abilityOwner = GetComponentInParent<CharacterScript>();
+        ownerParameters = abilityOwner.gameObject.GetComponent<Parameters>();
         if (!abilityOwner)
         {
             Debug.LogError($"{this.name} ability has no ability owner!");
@@ -90,6 +96,15 @@ public class BaseAbility : MonoBehaviour
         {
             Debug.LogError($"{gameObject} missing AudioSource component");
         }
+    }
+    protected float CalculateResultDamage()
+    {
+        float resultDamage = (damage + ownerParameters.GetMultuplyer(ParameterToBuff.DamageFlatMultiplyer)) * ((100 + ownerParameters.GetMultuplyer(ParameterToBuff.DamagePercentMultiplyer)) / 100);
+        if (resultDamage < 0 )
+        {
+            resultDamage = 0;
+        }
+        return resultDamage;
     }
     protected virtual void OnCharacterMove()
     {
@@ -159,8 +174,13 @@ public class BaseAbility : MonoBehaviour
                 //AbilityExecutingEvent.Invoke();
                 if(castTime>0)
                 {
+                    if(!canMoveWhileCastiong)
+                    {
+                        abilityOwner.GetMovementScript().ChangeMovementPossibility(false);
+                    }
                     AbilityCastingCoroutine = AbilityCastingTimer();
                     StartCoroutine(AbilityCastingCoroutine);
+
                 }
                 else
                 {
@@ -195,17 +215,21 @@ public class BaseAbility : MonoBehaviour
     }
     private void TryToExecuteAbility()
     {
-        if (abilityExecutionType == AbilityExecutionType.Continuous)
-        {
-            AbilityExecutionCoroutine = AbilityExecuteTimer();
-            StartCoroutine(AbilityExecutionCoroutine);
-        }
-        else if (abilityExecutionType == AbilityExecutionType.Instant)
-        {
-            print("try to execute instant ability");
-            ExecuteAbility();
-            OnFinishAbility();
-        }
+        //if (abilityExecutionType == AbilityExecutionType.Continuous)
+        //{
+        //    AbilityExecutionCoroutine = AbilityExecuteTimer();
+        //    abilityState = AbilityState.Executing;
+        //    StartCoroutine(AbilityExecutionCoroutine);
+        //}
+        //else if (abilityExecutionType == AbilityExecutionType.Instant)
+        //{
+        //    print("try to execute instant ability");
+        //    ExecuteAbility();
+        //    OnFinishAbility();
+        //}
+        AbilityExecutionCoroutine = AbilityExecuteTimer();
+        abilityState = AbilityState.Executing;
+        StartCoroutine(AbilityExecutionCoroutine);
 
     }
     public void InterruptAbility()
@@ -275,9 +299,9 @@ public class BaseAbility : MonoBehaviour
     #endregion
     #region Timers
 
-    protected IEnumerator AbilityExecuteTimer()
+    protected virtual IEnumerator AbilityExecuteTimer()
     {
-        abilityState = AbilityState.Executing;
+       
         float t = 0;
         while (t <= duration)
         {
@@ -295,7 +319,12 @@ public class BaseAbility : MonoBehaviour
         float t = 0;
         while(t <= castTime)
         {
+            t += Time.deltaTime;
             yield return null;
+        }
+        if (!canMoveWhileCastiong)
+        {
+            abilityOwner.GetMovementScript().ChangeMovementPossibility(true);
         }
         TryToExecuteAbility();
     }
@@ -345,7 +374,7 @@ public class BaseAbility : MonoBehaviour
         Cooldown,
         Disabled
     }
-    private enum AbilityExecutionType
+    protected enum AbilityExecutionType
     {
         Instant,
         Continuous
@@ -353,6 +382,7 @@ public class BaseAbility : MonoBehaviour
     protected enum AbilityTargetingOptions
     {
         OneTarget,
+        EveryEnemyWithinTemplate,
         Template
     }
 }

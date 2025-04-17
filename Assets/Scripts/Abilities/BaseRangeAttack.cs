@@ -14,7 +14,7 @@ public class BaseRangeAttack : BaseAttack
             Vector3 direction = target.transform.position - source.transform.position;// rotate source forward object to target 
             float angle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
             forwardObject.transform.eulerAngles = new Vector3(0, 0, -angle);
-            projectile.Create(source, target, damage);
+            projectile.Create(source, target, CalculateResultDamage());
             
         }
         else

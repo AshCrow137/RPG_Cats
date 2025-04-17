@@ -13,6 +13,6 @@ public class BaseMeleeAttack : BaseAttack
             Debug.LogError($"{target} has no CharacterScript attached to it!");
             return;
         }
-        targetCharacter.TakeDamage(damage);
+        targetCharacter.TakeDamage(CalculateResultDamage());
     }
 }
