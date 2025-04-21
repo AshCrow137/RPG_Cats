@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using UnityEditor.Playables;
 
 public class ButtonsManagerScript : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class ButtonsManagerScript : MonoBehaviour
 
     private Joystick abilityJoystick;
     private UnityAction abilityFinishedDelegate;
+    private UnityAction abilityCastingFinishedDelegate;
    
     //public ButtonsManagerScript(BaseAbility[] abilities) 
     //{
@@ -51,21 +53,28 @@ public class ButtonsManagerScript : MonoBehaviour
 
         }
         BasePlayerAbility activatedAbility = _abilities[AbilityNumber - 1] as BasePlayerAbility;
-        
+
+        abilityCastingFinishedDelegate = delegate { StartCastingTimer(CooldownImage, CooldownText, activatedAbility); };
+        activatedAbility.AbilityCastFinishedEvent.AddListener(abilityCastingFinishedDelegate);
         if (PlayerScript.Instance.TriggerAbility(AbilityNumber))
         {
-            abilityFinishedDelegate = delegate { StartAbilityTimer(CooldownImage, CooldownText, activatedAbility); };
-            activatedAbility.AbilityFinishedEvent.AddListener(abilityFinishedDelegate);
+            CooldownText.text = "casting";//TODO add button animations here
             CooldownText.gameObject.SetActive(true);
-            CooldownImage.fillAmount = 1;
-            
-  
+        
         }
-        
-        //AbilityDelegate= StartAbilityTimer(CooldownImage, CooldownText, activatedAbility);
-        
+        else
+        {
+            activatedAbility.AbilityCastFinishedEvent.RemoveListener(abilityCastingFinishedDelegate);
+        }
 
-
+    }
+    private void StartCastingTimer(Image cdImage, TextMeshProUGUI cdText, BasePlayerAbility ability)
+    {
+        
+        ability.AbilityCastFinishedEvent.RemoveListener(abilityCastingFinishedDelegate);
+        abilityFinishedDelegate = delegate { StartAbilityTimer(cdImage, cdText, ability); };
+        ability.AbilityFinishedEvent.AddListener(abilityFinishedDelegate);  
+        cdImage.fillAmount = 1;
     }
 
    

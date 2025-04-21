@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 public class BasePlayerAbility : BaseAbility
 {
@@ -12,6 +12,8 @@ public class BasePlayerAbility : BaseAbility
     protected GameObject AbilityDistance;
     [SerializeField]
     protected CATemplateScript AbilityTemplate;
+    [HideInInspector]
+    public UnityEvent AbilityCastFinishedEvent = new UnityEvent();
     protected override void Start()
     {
         base.Start();
@@ -63,8 +65,12 @@ public class BasePlayerAbility : BaseAbility
     }
     public void DrawAbilityDistance()
     {
-        AbilityDistance.transform.localScale = new Vector3(distance, distance, 1);
-        AbilityDistance.GetComponent<SpriteRenderer>().enabled = true;
+        if (hasTarget)
+        {
+            AbilityDistance.transform.localScale = new Vector3(distance, distance, 1);
+            AbilityDistance.GetComponent<SpriteRenderer>().enabled = true;
+        }
+       
     }
     public void StopDrawingAbilityDistance()
     {
@@ -116,10 +122,18 @@ public class BasePlayerAbility : BaseAbility
     {
         base.OnFinishAbility();
 
-        
+
     }
+    protected override void TryToExecuteAbility()
+    {
+        print("invoke execute event");
+        AbilityCastFinishedEvent.Invoke();
+        base.TryToExecuteAbility();
+    }
+
     protected override IEnumerator AbilityExecuteTimer()
     {
+       
         foreach(AbilityStruct ability in abilityStructs)
         {
             ability.AbilityEffect.ActivateEffect();

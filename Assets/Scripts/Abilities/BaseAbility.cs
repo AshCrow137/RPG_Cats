@@ -10,7 +10,7 @@ public class BaseAbility : MonoBehaviour
     [Header("Ability targeting options")]
     [SerializeField]
     protected bool hasTarget = true;
-    [SerializeField]
+    [SerializeField,ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(hasTarget))]
     protected AbilityTargetingOptions tagertOption;
     [Header("Ability parametres")]
     [SerializeField]
@@ -213,7 +213,7 @@ public class BaseAbility : MonoBehaviour
         }
 
     }
-    private void TryToExecuteAbility()
+    protected virtual void TryToExecuteAbility()
     {
         //if (abilityExecutionType == AbilityExecutionType.Continuous)
         //{
@@ -313,7 +313,7 @@ public class BaseAbility : MonoBehaviour
         OnFinishAbility();
 
     }
-    protected IEnumerator AbilityCastingTimer()
+    protected virtual IEnumerator AbilityCastingTimer()
     {
         abilityState = AbilityState.Casting;
         float t = 0;

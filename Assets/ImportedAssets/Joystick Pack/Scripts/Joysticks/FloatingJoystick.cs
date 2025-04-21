@@ -3,8 +3,9 @@
 public class FloatingJoystick : Joystick
 {
     public static FloatingJoystick Instance { get; private set; }
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (Instance != null && Instance != this)
         {
             Destroy(this);
