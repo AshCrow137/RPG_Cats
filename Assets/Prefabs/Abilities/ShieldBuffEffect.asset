@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37239fb5836186840b92c2b031a5afae, type: 3}
-  m_Name: DamageEffectStats
+  m_Script: {fileID: 11500000, guid: 2b31a6371d251fa4383a07525e2e4ac0, type: 3}
+  m_Name: ShieldBuffEffect
   m_EditorClassIdentifier: 
   Targets: []
-  EffectDuration: 0
-  ExecutionType: 0
-  DamageIntervalTime: 0.1
-  Damage: 20
+  EffectDuration: 20
+  ExecutionType: 1
+  parametresToBuff:
+  - parameter: 3
+    value: 30

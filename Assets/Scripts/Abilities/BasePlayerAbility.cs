@@ -58,7 +58,7 @@ public class BasePlayerAbility : BaseAbility
                     break;
                 case EffectTypes.Damage:
                     CADamageEffectStats damageStats = ability.Stats as CADamageEffectStats;
-                    ability.AbilityEffect = new CADamageEffect(damageStats.Targets, damageStats.ExecutionType, CalculateResultDamage(), damageStats.DamageIntervalTime,ownerParameters);
+                    ability.AbilityEffect = new CADamageEffect(damageStats.Targets, damageStats.ExecutionType, damageStats.Damage, damageStats.DamageIntervalTime,ownerParameters);
                     break;
                 
 

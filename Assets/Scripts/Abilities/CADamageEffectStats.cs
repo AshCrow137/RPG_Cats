@@ -5,4 +5,5 @@ public class CADamageEffectStats : CABaseEffectStats
 {
     
     public float DamageIntervalTime = 0.1f;
+    public float Damage = 1;
 }

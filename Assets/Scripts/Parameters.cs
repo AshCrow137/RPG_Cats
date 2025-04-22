@@ -25,7 +25,7 @@ public class Parameters : MonoBehaviour
     [SerializeField]
     protected int priority = 1;
 
-    [Header("Damage")]
+    [Header("BaseDamage")]
     [SerializeField]
     protected float damageFlatMultiplyer;
     [SerializeField]

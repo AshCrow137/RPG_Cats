@@ -16,9 +16,7 @@ MonoBehaviour:
   EffectDuration: 10
   ExecutionType: 1
   parametresToBuff:
-  - parameter: 0
-    value: 5
+  - parameter: 1
+    value: 35
   - parameter: 4
     value: 5
-  - parameter: 3
-    value: -30

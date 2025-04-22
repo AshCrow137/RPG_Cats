@@ -6,16 +6,16 @@ using static UnityEngine.GraphicsBuffer;
 public class CADamageEffect : CABaseEffect
 {
     
-    private float Damage;
+    private float BaseDamage;
     private float DamageIntervalTime;
     private List<CharacterScript> CharacterScripts;
     private Parameters ActivatorParameters;
-
+    private float ResultDamage = 0;
 
     private float t1 = 0;
     public CADamageEffect(List<GameObject> targets, EffectExecutionType executionType,float damage,float damageIntervalTime,Parameters activatorParameters) : base(targets, executionType)
     {
-        Damage = damage;
+        BaseDamage = damage;
         DamageIntervalTime = damageIntervalTime;
         CharacterScripts = new List<CharacterScript>();
         ActivatorParameters = activatorParameters;
@@ -37,12 +37,12 @@ public class CADamageEffect : CABaseEffect
     public override void ActivateEffect()
     {
         t1 = Time.time;
-        float resultDamage = (Damage + ActivatorParameters.GetMultuplyer(ParameterToBuff.DamageFlatMultiplyer)) * ((100 + ActivatorParameters.GetMultuplyer(ParameterToBuff.DamagePercentMultiplyer)) / 100);
-        if (resultDamage < 0)
+        ResultDamage = (BaseDamage + ActivatorParameters.GetMultuplyer(ParameterToBuff.DamageFlatMultiplyer)) * ((100 + ActivatorParameters.GetMultuplyer(ParameterToBuff.DamagePercentMultiplyer)) / 100);
+        if (ResultDamage < 0)
         {
-            resultDamage = 0;
+            ResultDamage = 0;
         }
-        Damage = resultDamage;
+        
         base.ActivateEffect();
     }
     public override void ExecuteEffect()
@@ -70,8 +70,11 @@ public class CADamageEffect : CABaseEffect
         {
             foreach (CharacterScript character in CharacterScripts)
             {
-
-                character.TakeDamage(Damage);
+                if(character != null)
+                {
+                    character.TakeDamage(ResultDamage);
+                }
+                
             }
         }
         
