@@ -7,12 +7,12 @@ using UnityEngine.Events;
 public class BaseAbility : MonoBehaviour
 {
     //Protected
-    [Header("Ability targeting options")]
+    [Header("ActivatedAbility targeting options")]
     [SerializeField]
     protected bool hasTarget = true;
     [SerializeField,ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(hasTarget))]
     protected AbilityTargetingOptions tagertOption;
-    [Header("Ability parametres")]
+    [Header("ActivatedAbility parametres")]
     [SerializeField]
     protected float damage = 1f;
     [SerializeField]
@@ -25,7 +25,7 @@ public class BaseAbility : MonoBehaviour
     protected float distance;
     [SerializeField]
     protected float castTime;
-    [Header("Ability type options")]
+    [Header("ActivatedAbility type options")]
     [SerializeField]
     protected AbilityExecutionType abilityExecutionType;
 
@@ -37,7 +37,7 @@ public class BaseAbility : MonoBehaviour
     // bool has target, bool activable, 
     // абилки в одну цель, абилки по шаблону (круг, линия, точка в пределах дистанции)
 
-    [Header("Ability sound options")]
+    [Header("ActivatedAbility sound options")]
     [SerializeField]
     protected AudioClip[] abilitySounds;
     [SerializeField]
@@ -46,7 +46,7 @@ public class BaseAbility : MonoBehaviour
     protected AudioClip abilityExecutionSound;
     [SerializeField]
     protected AudioClip abilityFinishedSound;
-    [Header("Ability visual options")]
+    [Header("ActivatedAbility visual options")]
     [SerializeField]
     protected Sprite AbilityIcon;
 
@@ -178,6 +178,8 @@ public class BaseAbility : MonoBehaviour
                     {
                         abilityOwner.GetMovementScript().ChangeMovementPossibility(false);
                     }
+                    //animations
+                    abilityOwner.GetAnimationScript().StartCastAnimation();
                     AbilityCastingCoroutine = AbilityCastingTimer();
                     StartCoroutine(AbilityCastingCoroutine);
 
@@ -326,7 +328,9 @@ public class BaseAbility : MonoBehaviour
         {
             abilityOwner.GetMovementScript().ChangeMovementPossibility(true);
         }
+        abilityOwner.GetAnimationScript().StopCastingAnimation();
         TryToExecuteAbility();
+        
     }
     protected IEnumerator AbilityCooldownTimer()
     {

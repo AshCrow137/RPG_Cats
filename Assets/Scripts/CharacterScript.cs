@@ -211,6 +211,10 @@ public class CharacterScript : MonoBehaviour
             return;
         }
     }
+    public AnimationScript GetAnimationScript()
+    {
+        return animationScript;
+    }
     public void TryToAttack()
     {
 

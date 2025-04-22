@@ -56,7 +56,10 @@ public class BasePlayerAbility : BaseAbility
                     CABuffEffectStats buffStats = ability.Stats as CABuffEffectStats;
                     ability.AbilityEffect = new CABuffEffect(buffStats.Targets, buffStats.ExecutionType, buffStats.parametresToBuff, ownerParameters, gameObject.name);
                     break;
-
+                case EffectTypes.Damage:
+                    CADamageEffectStats damageStats = ability.Stats as CADamageEffectStats;
+                    ability.AbilityEffect = new CADamageEffect(damageStats.Targets, damageStats.ExecutionType, CalculateResultDamage(), damageStats.DamageIntervalTime,ownerParameters);
+                    break;
                 
 
             }
