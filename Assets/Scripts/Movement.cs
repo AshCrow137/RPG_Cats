@@ -9,6 +9,8 @@ public class Movement : MonoBehaviour
 
     protected  ForwardObjectScript forwardObject;
     protected  AnimationScript animationScript;
+    protected CharacterScript ownerScript;
+    protected Parameters ownerParameters;
     protected bool canMove = true;
 
    
@@ -40,6 +42,17 @@ public class Movement : MonoBehaviour
         {
             Debug.LogError("Missing AnimationScript");
         }
+        ownerScript = GetComponent<CharacterScript>();
+        if (!ownerScript)
+        {
+            Debug.LogError("Missing OwnerScript");
+        }
+        ownerParameters = ownerScript.gameObject.GetComponent<Parameters>();
+        if (!ownerParameters)
+        {
+            Debug.LogError("Missing OwnerParameters");
+        }
+
     }
     protected virtual void Update()
     {
@@ -61,7 +74,7 @@ public class Movement : MonoBehaviour
         if (canMove && movementDirection != Vector2.zero)
         {
             OnMove.Invoke();
-            rb.MovePosition(rb.position + movementDirection.normalized * speed * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + movementDirection.normalized * CalculateSpeed() * Time.fixedDeltaTime);
             RotateForwardObject(movementDirection);
         }
         else
@@ -88,7 +101,7 @@ public class Movement : MonoBehaviour
         if (canMove && rotationDirection != Vector2.zero )
         {
 
-            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target, CalculateSpeed() * Time.deltaTime);
             RotateForwardObject(rotationDirection);
             animationScript.UpdateMovement(rotationDirection.x, rotationDirection.y, rotationDirection.sqrMagnitude);
 
@@ -103,6 +116,13 @@ public class Movement : MonoBehaviour
             RotateForwardObject(rotationDirection);
             //animationScript.UpdateMovement(rotationDirection.x, rotationDirection.y, rotationDirection.sqrMagnitude);
         }
+    }
+    private float CalculateSpeed()
+    {
+        float resultSpeed = 0;
+        resultSpeed = (speed + ownerParameters.GetMultuplyer(ParameterToBuff.MovementSpeedFlatMultiplyer)) * 
+            ((100 + ownerParameters.GetMultuplyer(ParameterToBuff.MovementSpeedPercentMultiplyer)) / 100);
+        return resultSpeed;
     }
     protected virtual void StopMove()
     {

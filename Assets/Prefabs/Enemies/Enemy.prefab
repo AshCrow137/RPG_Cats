@@ -71,6 +71,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3288748230291341155, guid: 526e105e00cb498468ca83847ad71ab3,
+        type: 3}
+      propertyPath: m_Radius
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 3528975515460646101, guid: 526e105e00cb498468ca83847ad71ab3,
         type: 3}
       propertyPath: m_Name
@@ -222,6 +227,12 @@ MonoBehaviour:
   maxEnergy: 3
   energyRegen: 1
   priority: 1
+  damageFlatMultiplyer: 0
+  damagePercentMultiplyer: 0
+  incomingDamagePercentMultiplyer: 0
+  incomingDamageFlatMultiplyer: 0
+  movementSpeedFlatMultiplyer: 0
+  movementSpeedPercentMultiplyer: 0
 --- !u!114 &5424010406057029099
 MonoBehaviour:
   m_ObjectHideFlags: 0

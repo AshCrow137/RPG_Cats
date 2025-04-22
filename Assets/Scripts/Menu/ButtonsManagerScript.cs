@@ -5,7 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using UnityEngine.Events;
+using UnityEditor.Playables;
 
 public class ButtonsManagerScript : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class ButtonsManagerScript : MonoBehaviour
     private bool cancelAbility = false;
 
     private Joystick abilityJoystick;
+    private UnityAction abilityFinishedDelegate;
+    private UnityAction abilityCastingFinishedDelegate;
    
     //public ButtonsManagerScript(BaseAbility[] abilities) 
     //{
@@ -49,35 +52,49 @@ public class ButtonsManagerScript : MonoBehaviour
             }
 
         }
-       
-        if(PlayerScript.Instance.TriggerAbility(AbilityNumber))
-        {
-            CooldownText.gameObject.SetActive(true);
-            CooldownImage.fillAmount = 1;
-            BasePlayerAbility activatedAbility = _abilities[AbilityNumber - 1] as BasePlayerAbility;
-            activatedAbility.AbilityFinishedEvent.AddListener(delegate { StartAbilityTimer(CooldownImage, CooldownText, activatedAbility); });
-        }
-        
-        //AbilityDelegate= StartAbilityTimer(CooldownImage, CooldownText, activatedAbility);
-        
+        BasePlayerAbility activatedAbility = _abilities[AbilityNumber - 1] as BasePlayerAbility;
 
+        abilityCastingFinishedDelegate = delegate { StartCastingTimer(CooldownImage, CooldownText, activatedAbility); };
+        activatedAbility.AbilityCastFinishedEvent.AddListener(abilityCastingFinishedDelegate);
+        if (PlayerScript.Instance.TriggerAbility(AbilityNumber))
+        {
+            CooldownText.text = "casting";//TODO add button animations here
+            CooldownText.gameObject.SetActive(true);
+        
+        }
+        else
+        {
+            activatedAbility.AbilityCastFinishedEvent.RemoveListener(abilityCastingFinishedDelegate);
+        }
 
     }
-  
-
-    public void OnDragDelegate(BaseEventData data )
+    private void StartCastingTimer(Image cdImage, TextMeshProUGUI cdText, BasePlayerAbility ability)
     {
         
-        Debug.Log("Dragging.");
-        abilityJoystick.OnDrag(data as PointerEventData);
-        Vector2 direction = abilityJoystick.Direction;
-        selectedAbility.RotateAbilityTemplate(direction);
+        ability.AbilityCastFinishedEvent.RemoveListener(abilityCastingFinishedDelegate);
+        abilityFinishedDelegate = delegate { StartAbilityTimer(cdImage, cdText, ability); };
+        ability.AbilityFinishedEvent.AddListener(abilityFinishedDelegate);  
+        cdImage.fillAmount = 1;
+    }
+
+   
+    public void OnDragDelegate(BaseEventData data )
+    {
+        if(abilityJoystick.isActiveAndEnabled)
+        {
+            
+            abilityJoystick.OnDrag(data as PointerEventData);
+            Vector2 direction = abilityJoystick.Direction;
+            selectedAbility.RotateAbilityTemplate(direction);
+        }
+        
     }
     public void SelectAbility(int abilityNumber)
     {
-        
-            selectedAbility = _abilities[abilityNumber - 1] as BasePlayerAbility;
-            DrawAbilityDistance();
+
+        cancelAbility = false;
+        selectedAbility = _abilities[abilityNumber - 1] as BasePlayerAbility;
+        DrawAbilityDistance();
         
         
     }
@@ -90,21 +107,32 @@ public class ButtonsManagerScript : MonoBehaviour
 
     public void DrawAbilityTemplate(Joystick selectedAbilityJoystick)
     {
-        print("draw template");
+     
         abilityJoystick = selectedAbilityJoystick;
-        selectedAbility?.DrawAbilityTemplate();
-        abilityJoystick.gameObject.SetActive(true);
+        if(selectedAbility.DrawAbilityTemplate(true))
+        {
+            abilityJoystick.gameObject.SetActive(true);
+        }
+        
     }
     public void StopDrawingAbilityTemplate(int abilityNumber)
     {
-        print("stop drawing template");
-        print(selectedAbility);
-        selectedAbility?.StopDrawingAbilityTemplate();
-        abilityJoystick.gameObject.SetActive(false);
+        if (selectedAbility.DrawAbilityTemplate(false))
+        {
+            abilityJoystick.gameObject.SetActive(false);
+        }
         if (!cancelAbility)
         {
             ActivateAbility(abilityNumber);
         }
+    }
+    public void CancelAbility()
+    {
+        cancelAbility=true;
+    }
+    public void DecancelAbility()
+    {
+        cancelAbility=false;
     }
     private void Awake()
     {
@@ -140,8 +168,10 @@ public class ButtonsManagerScript : MonoBehaviour
     }
     private void StartAbilityTimer(Image cdImage, TextMeshProUGUI cdText, BaseAbility ability)
     {
+        
         StartCoroutine(StartButtonCooldownCoroutine(cdImage, cdText, ability)); 
-        ability.AbilityFinishedEvent.RemoveAllListeners();
+       
+       
     }
 
     private IEnumerator StartButtonCooldownCoroutine(Image cdImage, TextMeshProUGUI cdText, BaseAbility ability)
@@ -156,6 +186,7 @@ public class ButtonsManagerScript : MonoBehaviour
             yield return null;
         }
         cdText.gameObject.SetActive(false);
+        ability.AbilityFinishedEvent.RemoveListener(abilityFinishedDelegate);
     }
 
     public void ActivateBasicAttack()

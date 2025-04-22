@@ -162,14 +162,26 @@ public class CharacterScript : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        OnTakeDamage();    
-        parameters.ChangeHealth(-damage);
-        float health = parameters.GetHealth();
-        if (health <= 0)
+        
+        float resultDamage = (damage - parameters.GetMultuplyer(ParameterToBuff.IncomingDamageFlatMultiplyer)) *
+            ((100 - parameters.GetMultuplyer(ParameterToBuff.IncomingDamagePercentMultiplyer)) / 100);
+        if (resultDamage > 0)
         {
-            
-            KillCharacter();
+            OnTakeDamage();
+            parameters.ChangeHealth(-resultDamage);
+            Debug.Log($"{gameObject} take {resultDamage} damage");
+            float health = parameters.GetHealth();
+            if (health <= 0)
+            {
+
+                KillCharacter();
+            }
         }
+        else
+        {
+            Debug.Log($"{gameObject} take no damage, result damage < 0 ");
+        }
+        
 
     }
     protected virtual void OnTakeDamage()
@@ -198,6 +210,10 @@ public class CharacterScript : MonoBehaviour
         {
             return;
         }
+    }
+    public AnimationScript GetAnimationScript()
+    {
+        return animationScript;
     }
     public void TryToAttack()
     {

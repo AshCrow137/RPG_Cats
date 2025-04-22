@@ -33,6 +33,13 @@ public class AnimationScript : MonoBehaviour
         //animator.SetBool("IsAttacking", false);
 
     }
-
+    public void StartCastAnimation()
+    {
+        animator.SetTrigger("StartCastingAnimation");
+    }
+    public void StopCastingAnimation()
+    {
+        animator.SetTrigger("StopCastingAnimation");
+    }
     public Animator GetAnimator() { return animator; }
 }

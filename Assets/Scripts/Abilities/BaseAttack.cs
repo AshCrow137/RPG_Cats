@@ -31,7 +31,7 @@ public class BaseAttack : BaseAbility
     protected virtual void Attack(GameObject source, GameObject target)
     {
 
-        print($" {source} Attack {target} for {damage}");
+        print($" {source} Attack {target} for {CalculateResultDamage()}");
         //print(Vector3.Angle(source.transform.position, target.transform.position));
         GameObject fo = abilityOwner.GetForwardObject();
         //TODO Animations 

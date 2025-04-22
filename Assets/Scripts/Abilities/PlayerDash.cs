@@ -14,11 +14,8 @@ public class PlayerDash : BasePlayerAbility
 
     public void Dash()
     {
-
-        //rb.velocity = rb.velocity * DashDistance;
         Vector3 FOpos = AbilityTemplate.gameObject.transform.localPosition;
-        //Vector2 target = new Vector2 ( FOpos.x, FOpos.y) ;
-        //Vector2 target = movementScript.getMovement();
+
         float rad = (AbilityTemplate.transform.eulerAngles.z + 90) * Mathf.Deg2Rad;
 
         Vector2 target = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
@@ -32,7 +29,7 @@ public class PlayerDash : BasePlayerAbility
 
         rb = source.GetComponent<Rigidbody2D>();
         movementScript = source.GetComponent<Movement>();
-        //print(rb);
+        //print(rbArray);
         if (movementScript == null)
         {
             Debug.LogError($"No movement script attached to {this.name}");

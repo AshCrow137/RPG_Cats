@@ -7,12 +7,12 @@ using UnityEngine.Events;
 public class BaseAbility : MonoBehaviour
 {
     //Protected
-    [Header("Ability targeting options")]
+    [Header("ActivatedAbility targeting options")]
     [SerializeField]
     protected bool hasTarget = true;
-    [SerializeField]
-    protected AbilityTargetingOptions tagert;
-    [Header("Ability parametres")]
+    [SerializeField,ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(hasTarget))]
+    protected AbilityTargetingOptions tagertOption;
+    [Header("ActivatedAbility parametres")]
     [SerializeField]
     protected float damage = 1f;
     [SerializeField]
@@ -25,16 +25,19 @@ public class BaseAbility : MonoBehaviour
     protected float distance;
     [SerializeField]
     protected float castTime;
-    [Header("Ability type options")]
+    [Header("ActivatedAbility type options")]
     [SerializeField]
-    private AbilityExecutionType abilityExecutionType;
+    protected AbilityExecutionType abilityExecutionType;
 
     [SerializeField]
     protected bool canBeInterrupted = true;
- // bool has target, bool activable, 
- // абилки в одну цель, абилки по шаблону (круг, линия, точка в пределах дистанции)
+    [SerializeField]
+    protected bool canMoveWhileCastiong = false;
+    // bool has target, bool activable, 
+    // bool has target, bool activable, 
+    // абилки в одну цель, абилки по шаблону (круг, линия, точка в пределах дистанции)
 
-    [Header("Ability sound options")]
+    [Header("ActivatedAbility sound options")]
     [SerializeField]
     protected AudioClip[] abilitySounds;
     [SerializeField]
@@ -43,7 +46,7 @@ public class BaseAbility : MonoBehaviour
     protected AudioClip abilityExecutionSound;
     [SerializeField]
     protected AudioClip abilityFinishedSound;
-    [Header("Ability visual options")]
+    [Header("ActivatedAbility visual options")]
     [SerializeField]
     protected Sprite AbilityIcon;
 
@@ -63,11 +66,14 @@ public class BaseAbility : MonoBehaviour
     public UnityEvent AbilityFinishedEvent = new UnityEvent();
     protected AudioSource audioSource;
 
+    protected Parameters ownerParameters;
+
     #region UnityMethods
     protected virtual void Start()
     {
         abilityState = AbilityState.Ready;
         abilityOwner = GetComponentInParent<CharacterScript>();
+        ownerParameters = abilityOwner.gameObject.GetComponent<Parameters>();
         if (!abilityOwner)
         {
             Debug.LogError($"{this.name} ability has no ability owner!");
@@ -90,6 +96,15 @@ public class BaseAbility : MonoBehaviour
         {
             Debug.LogError($"{gameObject} missing AudioSource component");
         }
+    }
+    protected float CalculateResultDamage()
+    {
+        float resultDamage = (damage + ownerParameters.GetMultuplyer(ParameterToBuff.DamageFlatMultiplyer)) * ((100 + ownerParameters.GetMultuplyer(ParameterToBuff.DamagePercentMultiplyer)) / 100);
+        if (resultDamage < 0 )
+        {
+            resultDamage = 0;
+        }
+        return resultDamage;
     }
     protected virtual void OnCharacterMove()
     {
@@ -159,8 +174,15 @@ public class BaseAbility : MonoBehaviour
                 //AbilityExecutingEvent.Invoke();
                 if(castTime>0)
                 {
+                    if(!canMoveWhileCastiong)
+                    {
+                        abilityOwner.GetMovementScript().ChangeMovementPossibility(false);
+                    }
+                    //animations
+                    abilityOwner.GetAnimationScript().StartCastAnimation();
                     AbilityCastingCoroutine = AbilityCastingTimer();
                     StartCoroutine(AbilityCastingCoroutine);
+
                 }
                 else
                 {
@@ -171,8 +193,13 @@ public class BaseAbility : MonoBehaviour
                 {
                     audioSource.Stop();
                 }
-                audioSource.clip = GetRandomAbilitySound();
-                audioSource.Play();
+                AudioClip audioClip = GetRandomAbilitySound();
+                if (true)
+                {
+                    audioSource.clip = audioClip;
+                    audioSource.Play();
+                }
+                
                 return true;
             }
             else
@@ -188,18 +215,23 @@ public class BaseAbility : MonoBehaviour
         }
 
     }
-    private void TryToExecuteAbility()
+    protected virtual void TryToExecuteAbility()
     {
-        if (abilityExecutionType == AbilityExecutionType.Continuous)
-        {
-            AbilityExecutionCoroutine = AbilityExecuteTimer();
-            StartCoroutine(AbilityExecutionCoroutine);
-        }
-        else if (abilityExecutionType == AbilityExecutionType.Instant)
-        {
-            ExecuteAbility();
-            OnFinishAbility();
-        }
+        //if (abilityExecutionType == AbilityExecutionType.Continuous)
+        //{
+        //    AbilityExecutionCoroutine = AbilityExecuteTimer();
+        //    abilityState = AbilityState.Executing;
+        //    StartCoroutine(AbilityExecutionCoroutine);
+        //}
+        //else if (abilityExecutionType == AbilityExecutionType.Instant)
+        //{
+        //    print("try to execute instant ability");
+        //    ExecuteAbility();
+        //    OnFinishAbility();
+        //}
+        AbilityExecutionCoroutine = AbilityExecuteTimer();
+        abilityState = AbilityState.Executing;
+        StartCoroutine(AbilityExecutionCoroutine);
 
     }
     public void InterruptAbility()
@@ -260,14 +292,18 @@ public class BaseAbility : MonoBehaviour
     }
     public AudioClip GetRandomAbilitySound()
     {
-        return abilitySounds[UnityEngine.Random.Range(0, abilitySounds.Length)];
+        if(abilitySounds.Length > 0)
+        {
+            return abilitySounds[UnityEngine.Random.Range(0, abilitySounds.Length)];
+        }
+        else return null;
     }
     #endregion
     #region Timers
 
-    protected IEnumerator AbilityExecuteTimer()
+    protected virtual IEnumerator AbilityExecuteTimer()
     {
-        abilityState = AbilityState.Executing;
+       
         float t = 0;
         while (t <= duration)
         {
@@ -279,15 +315,22 @@ public class BaseAbility : MonoBehaviour
         OnFinishAbility();
 
     }
-    protected IEnumerator AbilityCastingTimer()
+    protected virtual IEnumerator AbilityCastingTimer()
     {
         abilityState = AbilityState.Casting;
         float t = 0;
         while(t <= castTime)
         {
+            t += Time.deltaTime;
             yield return null;
         }
+        if (!canMoveWhileCastiong)
+        {
+            abilityOwner.GetMovementScript().ChangeMovementPossibility(true);
+        }
+        abilityOwner.GetAnimationScript().StopCastingAnimation();
         TryToExecuteAbility();
+        
     }
     protected IEnumerator AbilityCooldownTimer()
     {
@@ -335,7 +378,7 @@ public class BaseAbility : MonoBehaviour
         Cooldown,
         Disabled
     }
-    private enum AbilityExecutionType
+    protected enum AbilityExecutionType
     {
         Instant,
         Continuous
@@ -343,6 +386,7 @@ public class BaseAbility : MonoBehaviour
     protected enum AbilityTargetingOptions
     {
         OneTarget,
+        EveryEnemyWithinTemplate,
         Template
     }
 }
