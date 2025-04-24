@@ -23,7 +23,12 @@ public class CAMoveEffect : CABaseEffect
         Distance = distance;
         foreach(GameObject target in targets )
         {
-            rbArray.Add(target.GetComponent<Rigidbody2D>());
+            Rigidbody2D rigidbody2D = target.GetComponent<Rigidbody2D>();
+            if( rigidbody2D != null )
+            {
+                rbArray.Add(rigidbody2D);
+            }
+            
         }
         if(moveType == MoveEffectTypes.Teleport)
         {
@@ -39,14 +44,19 @@ public class CAMoveEffect : CABaseEffect
         switch ( MoveEffectType )
         {
             case MoveEffectTypes.MoveToTarget:
-                //float rad = (AbilityTemplate.transform.eulerAngles.z + 90) * Mathf.Deg2Rad;
 
-                //Vector2 targets = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
-                foreach (Rigidbody2D rb in rbArray )
+                if(rbArray.Count > 0)
                 {
-                   rb.MovePosition(rb.position + targetPoint * Speed * Time.fixedDeltaTime);
-                  //  Debug.Log($"move {rb.gameObject}  to {targetPoint} by {MoveEffectType} with speed {Speed}");
+                    foreach (Rigidbody2D rb in rbArray)
+                    {
+                        if (rb)
+                        {
+                            rb.MovePosition(rb.position + targetPoint * Speed * Time.fixedDeltaTime);
+
+                        }
+                    }
                 }
+               
                 
                
                 //Targets.transform.position = Vector3.MoveTowards(Targets.transform.position, CalculateTemplateTargetPoint(TargetPointTemplate, Distance), Speed * Time.deltaTime);
@@ -90,7 +100,12 @@ public class CAMoveEffect : CABaseEffect
         
         foreach (GameObject target in Targets)
         {
-            target.GetComponent<Movement>()?.ChangeMovementPossibility(true);
+            //TODO bug here when move effect after damage 
+            if(target)
+            {
+                target?.GetComponent<Movement>()?.ChangeMovementPossibility(true);
+            }
+            
         }
         base.FinishEffect();
     }
