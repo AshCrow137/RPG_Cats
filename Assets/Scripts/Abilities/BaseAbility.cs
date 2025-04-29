@@ -12,6 +12,8 @@ public class BaseAbility : MonoBehaviour
     protected bool hasTarget = true;
     [SerializeField,ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(hasTarget))]
     protected AbilityTargetingOptions tagertOption;
+    [SerializeField]
+    protected OneTargetOptions OneTargetOptions;
     [Header("ActivatedAbility parametres")]
     [SerializeField]
     protected float damage = 1f;

@@ -42,6 +42,10 @@ public class CharacterScript : MonoBehaviour
 
 
     }
+    public List<CharacterScript> GetEnemyList()
+    {
+        return Enemylist;
+    }
     protected virtual int GetCharacterPriority()
     {
         return parameters.GetPriority();
@@ -112,7 +116,7 @@ public class CharacterScript : MonoBehaviour
         }
         return false;
     }
-    protected virtual CharacterScript GetClosestEnemy(List<CharacterScript> listOfTargets)
+    public virtual CharacterScript GetClosestEnemy(List<CharacterScript> listOfTargets)
     {
         if (listOfTargets.Count != 0)
         {

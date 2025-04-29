@@ -12,6 +12,7 @@ public class BasePlayerAbility : BaseAbility
     protected GameObject AbilityDistance;
     [SerializeField]
     protected CATemplateScript AbilityTemplate;
+    
     [HideInInspector]
     public UnityEvent AbilityCastFinishedEvent = new UnityEvent();
     protected override void Start()
@@ -111,8 +112,25 @@ public class BasePlayerAbility : BaseAbility
                     ability.AbilityEffect.SetTargets(targets);
                     break;
                 case AbilityTargetingOptions.OneTarget://TODO ѕолучать цель в абилке одним из способов: ближайша€, по выбору, рандомна€
-
-                    ability.AbilityEffect.SetTargets(new List<GameObject>() { Target });
+                    GameObject newTarget = null ;
+                    switch (OneTargetOptions)
+                    {
+                        case OneTargetOptions.Closest:
+                             newTarget = abilityOwner.GetClosestEnemy(abilityOwner.GetEnemyList()).gameObject;
+                            break;
+                        case OneTargetOptions.Selected:
+                            //TODO ƒобавить возможность выбирать цель 
+                            break;
+                        case OneTargetOptions.Random:
+                            List<CharacterScript> characters = abilityOwner.GetEnemyList();
+                            if(characters.Count > 0)
+                            {
+                                newTarget = characters[UnityEngine.Random.Range(0, characters.Count)].gameObject;
+                            }
+                            
+                            break;
+                    }    
+                    ability.AbilityEffect.SetTargets(new List<GameObject>() { newTarget });
                     break;
 
             }
@@ -184,4 +202,9 @@ public enum EffectTypes
     Debuff
 
 }
-
+public enum OneTargetOptions
+{
+    Closest,
+    Selected,
+    Random
+}

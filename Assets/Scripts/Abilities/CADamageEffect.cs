@@ -27,7 +27,7 @@ public class CADamageEffect : CABaseEffect
         CharacterScripts.Clear();
         foreach (GameObject target in newTargets)
         {
-            CharacterScript script = target.GetComponent<CharacterScript>();
+            CharacterScript script = target?.GetComponent<CharacterScript>();
             if (script != null)
             {
                 CharacterScripts.Add(script);
