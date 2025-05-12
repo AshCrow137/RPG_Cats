@@ -9,6 +9,8 @@ public class CharacterScript : MonoBehaviour
 
     [SerializeField]
     protected BaseAttack baseAttack;
+    [SerializeField]
+    protected GameObject selection;
 
     [SerializeField]
     protected BaseAbility[] abilityArray = new BaseAbility[3];
@@ -24,6 +26,7 @@ public class CharacterScript : MonoBehaviour
     protected AnimationScript animationScript;
     protected IEnumerator AttackCoroutine; 
 
+    protected CharacterUIScript characterUIScript;
    
     protected virtual void Awake()
     {
@@ -39,7 +42,12 @@ public class CharacterScript : MonoBehaviour
         {
             Debug.LogError("Missing AnimationScript");
         }
+        characterUIScript = GetComponentInChildren<CharacterUIScript>();
+        if (!characterUIScript)
 
+        {
+            Debug.LogError("Missing CharacterUI script!");
+        }
 
     }
     public List<CharacterScript> GetEnemyList()
@@ -87,7 +95,7 @@ public class CharacterScript : MonoBehaviour
         }
     }
 
-    public bool  TriggerAbility(int number)
+    public bool  TriggerAbility(int number,GameObject target)
     {
         Debug.Log("Activate ability");
 
@@ -97,7 +105,7 @@ public class CharacterScript : MonoBehaviour
             if (ability != null)
             {
 
-                if(ability.ActivateAbility(this.gameObject, ability.GetTarget()))
+                if(ability.ActivateAbility(this.gameObject, target))
                 {
                     return true;
                 }
@@ -169,6 +177,7 @@ public class CharacterScript : MonoBehaviour
         
         float resultDamage = (damage - parameters.GetMultuplyer(ParameterToBuff.IncomingDamageFlatMultiplyer)) *
             ((100 - parameters.GetMultuplyer(ParameterToBuff.IncomingDamagePercentMultiplyer)) / 100);
+        characterUIScript.ShowTakenDamage(resultDamage);
         if (resultDamage > 0)
         {
             OnTakeDamage();
@@ -190,7 +199,7 @@ public class CharacterScript : MonoBehaviour
     }
     protected virtual void OnTakeDamage()
     {
-
+        
     }
     public virtual void KillCharacter()
     {
@@ -301,5 +310,13 @@ public class CharacterScript : MonoBehaviour
     public Movement GetMovementScript()
     {
         return movementScript;
+    }
+    public void SelectCharacter()
+    {
+        selection.SetActive(true);
+    }
+    public void DeselectCharacter()
+    {
+        selection.SetActive(false);
     }
 }

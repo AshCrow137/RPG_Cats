@@ -12,7 +12,7 @@ public class BaseAbility : MonoBehaviour
     protected bool hasTarget = true;
     [SerializeField,ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(hasTarget))]
     protected AbilityTargetingOptions tagertOption;
-    [SerializeField]
+    [SerializeField, ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(hasTarget))]
     protected OneTargetOptions OneTargetOptions;
     [Header("ActivatedAbility parametres")]
     [SerializeField]

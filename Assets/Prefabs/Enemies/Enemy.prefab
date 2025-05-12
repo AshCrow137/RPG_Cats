@@ -246,6 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseAttack: {fileID: 4706114957639066693}
+  selection: {fileID: 8838387540594926772}
   abilityArray:
   - {fileID: 0}
   - {fileID: 0}
@@ -285,6 +286,12 @@ MonoBehaviour:
 --- !u!4 &8288536025065952751 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5762079745416637641, guid: 526e105e00cb498468ca83847ad71ab3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4391519149782579494}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8838387540594926772 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5069238735841500562, guid: 526e105e00cb498468ca83847ad71ab3,
     type: 3}
   m_PrefabInstance: {fileID: 4391519149782579494}
   m_PrefabAsset: {fileID: 0}

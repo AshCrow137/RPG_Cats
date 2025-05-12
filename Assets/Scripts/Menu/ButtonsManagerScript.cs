@@ -56,7 +56,7 @@ public class ButtonsManagerScript : MonoBehaviour
 
         abilityCastingFinishedDelegate = delegate { StartCastingTimer(CooldownImage, CooldownText, activatedAbility); };
         activatedAbility.AbilityCastFinishedEvent.AddListener(abilityCastingFinishedDelegate);
-        if (PlayerScript.Instance.TriggerAbility(AbilityNumber))
+        if (PlayerScript.Instance.TriggerAbility(AbilityNumber,activatedAbility.SelectTarget()))
         {
             CooldownText.text = "casting";//TODO add button animations here
             CooldownText.gameObject.SetActive(true);
@@ -124,6 +124,7 @@ public class ButtonsManagerScript : MonoBehaviour
         if (!cancelAbility)
         {
             ActivateAbility(abilityNumber);
+            selectedAbility.DrawAbilityTemplate(false);
         }
     }
     public void CancelAbility()

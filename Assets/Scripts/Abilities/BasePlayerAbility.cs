@@ -85,9 +85,15 @@ public class BasePlayerAbility : BaseAbility
     {
         if(hasTarget&&(tagertOption==AbilityTargetingOptions.Template|| tagertOption == AbilityTargetingOptions.EveryEnemyWithinTemplate))
         {
-            AbilityTemplate.gameObject.GetComponentInChildren<SpriteRenderer>().enabled = draw; ;
+            AbilityTemplate.ActivateTemplate(draw);
+            
             return true;
         }
+        else
+        {
+            
+        }
+        AbilityTemplate.DeactivateTemplate();
         return false;
     }
 
@@ -112,32 +118,43 @@ public class BasePlayerAbility : BaseAbility
                     ability.AbilityEffect.SetTargets(targets);
                     break;
                 case AbilityTargetingOptions.OneTarget://TODO ѕолучать цель в абилке одним из способов: ближайша€, по выбору, рандомна€
-                    GameObject newTarget = null ;
-                    switch (OneTargetOptions)
-                    {
-                        case OneTargetOptions.Closest:
-                             newTarget = abilityOwner.GetClosestEnemy(abilityOwner.GetEnemyList()).gameObject;
-                            break;
-                        case OneTargetOptions.Selected:
-                            //TODO ƒобавить возможность выбирать цель 
-                            break;
-                        case OneTargetOptions.Random:
-                            List<CharacterScript> characters = abilityOwner.GetEnemyList();
-                            if(characters.Count > 0)
-                            {
-                                newTarget = characters[UnityEngine.Random.Range(0, characters.Count)].gameObject;
-                            }
-                            
-                            break;
-                    }    
-                    ability.AbilityEffect.SetTargets(new List<GameObject>() { newTarget });
+                     
+                    ability.AbilityEffect.SetTargets(new List<GameObject>() { Target });
                     break;
 
             }
             
             
         }
+        AbilityTemplate.DeactivateTemplate();
         return base.ActivateAbility(source, Target);
+    }
+    public GameObject SelectTarget()
+    {
+        GameObject newTarget = null;
+        if(tagertOption!=AbilityTargetingOptions.OneTarget)
+        {
+            return abilityOwner.gameObject;
+        }
+        switch (OneTargetOptions)
+        {
+            case OneTargetOptions.Closest:
+                newTarget = abilityOwner.GetClosestEnemy(abilityOwner.GetEnemyList()).gameObject;
+                break;
+            case OneTargetOptions.Selected:
+                //TODO ƒобавить возможность выбирать цель 
+                break;
+            case OneTargetOptions.Random:
+                List<CharacterScript> characters = abilityOwner.GetEnemyList();
+                if (characters.Count > 0)
+                {
+                    CharacterScript charc = characters[UnityEngine.Random.Range(0, characters.Count)];
+                    newTarget = charc.gameObject;
+                }
+
+                break;
+        }
+        return newTarget;
     }
     protected override void OnFinishAbility()
     {
