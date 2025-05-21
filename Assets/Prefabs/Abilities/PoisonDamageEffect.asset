@@ -15,5 +15,5 @@ MonoBehaviour:
   Targets: []
   EffectDuration: 2
   ExecutionType: 1
-  DamageIntervalTime: 0.5
-  Damage: 4
+  DamageIntervalTime: 0.2
+  Damage: 1

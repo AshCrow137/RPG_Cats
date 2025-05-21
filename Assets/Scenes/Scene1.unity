@@ -13121,13 +13121,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8221021774273073319, guid: 900306b337bd56a45996475183427dcc,
         type: 3}
-      propertyPath: tagertOption
+      propertyPath: cooldown
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8221021774273073319, guid: 900306b337bd56a45996475183427dcc,
+        type: 3}
+      propertyPath: tagertOption
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8221021774273073319, guid: 900306b337bd56a45996475183427dcc,
         type: 3}
       propertyPath: OneTargetOptions
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8221021774273073319, guid: 900306b337bd56a45996475183427dcc,
+        type: 3}
+      propertyPath: abilityStructs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8221021774273073319, guid: 900306b337bd56a45996475183427dcc,
+        type: 3}
+      propertyPath: abilityStructs.Array.data[1].Stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 8206c5dd922430945a74f98bc4119fe4,
+        type: 2}
+    - target: {fileID: 8221021774273073319, guid: 900306b337bd56a45996475183427dcc,
+        type: 3}
+      propertyPath: abilityStructs.Array.data[1].EffectTypes
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

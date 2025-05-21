@@ -83,7 +83,11 @@ public class BasePlayerAbility : BaseAbility
     public bool DrawAbilityTemplate(bool draw)
         
     {
-        if(hasTarget&&(tagertOption==AbilityTargetingOptions.Template|| tagertOption == AbilityTargetingOptions.EveryEnemyWithinTemplate))
+        if (!hasTarget)
+        {
+            return false;
+        }
+        if(tagertOption==AbilityTargetingOptions.Template|| tagertOption == AbilityTargetingOptions.EveryEnemyWithinTemplate)
         {
             AbilityTemplate.ActivateTemplate(draw);
             
@@ -93,7 +97,7 @@ public class BasePlayerAbility : BaseAbility
         {
             
         }
-        AbilityTemplate.DeactivateTemplate();
+        
         return false;
     }
 
