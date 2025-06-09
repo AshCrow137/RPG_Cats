@@ -41,11 +41,12 @@ public class ButtonsManagerScript : MonoBehaviour
         TextMeshProUGUI CooldownText = null;
         foreach (Transform t in abilityButton.transform)
         {
-            if(t.gameObject.TryGetComponent<Image>(out Image image))
-            {
-                CooldownImage = image;
-            }
-
+            if(t.gameObject.TryGetComponent<Image>(out Image image)&& t.gameObject.tag == "CooldownImage")
+           
+            
+                {
+                    CooldownImage = image;
+                }
             if (t.gameObject.TryGetComponent<TextMeshProUGUI>(out TextMeshProUGUI text))
             {
                 CooldownText = text;
@@ -72,9 +73,10 @@ public class ButtonsManagerScript : MonoBehaviour
     {
         
         ability.AbilityCastFinishedEvent.RemoveListener(abilityCastingFinishedDelegate);
+        
         abilityFinishedDelegate = delegate { StartAbilityTimer(cdImage, cdText, ability); };
         ability.AbilityFinishedEvent.AddListener(abilityFinishedDelegate);  
-        cdImage.fillAmount = 1;
+        
     }
 
    
@@ -94,13 +96,24 @@ public class ButtonsManagerScript : MonoBehaviour
 
         cancelAbility = false;
         selectedAbility = _abilities[abilityNumber - 1] as BasePlayerAbility;
+        
+        CharacterScript charc = selectedAbility.SelectTarget().GetComponent<CharacterScript>();
+        if( charc != null )
+        {
+            charc.SelectCharacter();
+        }
         DrawAbilityDistance();
         
         
     }
     public void DeselectAbility() 
-    { 
-        
+    {
+        CharacterScript charc = selectedAbility.SelectTarget().GetComponent<CharacterScript>();
+        if (charc != null)
+        {
+            charc.DeselectCharacter();
+        }
+
         StopDrawAbilityDistance();
         
     }
@@ -169,7 +182,7 @@ public class ButtonsManagerScript : MonoBehaviour
     }
     private void StartAbilityTimer(Image cdImage, TextMeshProUGUI cdText, BaseAbility ability)
     {
-        
+        cdImage.fillAmount = 1;
         StartCoroutine(StartButtonCooldownCoroutine(cdImage, cdText, ability)); 
        
        

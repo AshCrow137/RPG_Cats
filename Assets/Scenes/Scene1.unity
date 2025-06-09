@@ -1128,9 +1128,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 90bd95b9cd8e8f44ebb15453b5fa16cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9c651f56dc75d4a408b113a2fee717fe, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1613,9 +1613,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 90bd95b9cd8e8f44ebb15453b5fa16cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d14d3d1a8e9a07043ba7f0149d096c31, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -2512,7 +2512,7 @@ GameObject:
   - component: {fileID: 362251090}
   m_Layer: 5
   m_Name: CooldownImage
-  m_TagString: Untagged
+  m_TagString: CooldownImage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3251,7 +3251,7 @@ GameObject:
   - component: {fileID: 491921787}
   m_Layer: 5
   m_Name: CooldownImage
-  m_TagString: Untagged
+  m_TagString: CooldownImage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3420,9 +3420,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 90bd95b9cd8e8f44ebb15453b5fa16cb, type: 3}
+  m_Sprite: {fileID: 697919745, guid: 9c5ce2ebdf751754a854f3bb2fd483c1, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -5524,7 +5524,7 @@ GameObject:
   - component: {fileID: 995845333}
   m_Layer: 5
   m_Name: CooldownImage
-  m_TagString: Untagged
+  m_TagString: CooldownImage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6535,7 +6535,7 @@ GameObject:
   - component: {fileID: 1261863639}
   m_Layer: 5
   m_Name: CooldownImage
-  m_TagString: Untagged
+  m_TagString: CooldownImage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12976,9 +12976,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 90bd95b9cd8e8f44ebb15453b5fa16cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1c708f043fcc48744909bc5f609ce65e, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -13049,6 +13049,12 @@ PrefabInstance:
       propertyPath: hasTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2493787587713055136, guid: 900306b337bd56a45996475183427dcc,
+        type: 3}
+      propertyPath: AbilityIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 1c708f043fcc48744909bc5f609ce65e,
+        type: 3}
     - target: {fileID: 4343863362443866585, guid: 900306b337bd56a45996475183427dcc,
         type: 3}
       propertyPath: m_SortingLayer
@@ -13114,6 +13120,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7399693946392435344, guid: 900306b337bd56a45996475183427dcc,
+        type: 3}
+      propertyPath: AbilityIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 9aec62314dc28674284e7c3203bd033e,
+        type: 3}
+    - target: {fileID: 7631347931820098622, guid: 900306b337bd56a45996475183427dcc,
+        type: 3}
+      propertyPath: AbilityIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: d14d3d1a8e9a07043ba7f0149d096c31,
+        type: 3}
     - target: {fileID: 7775989110488526755, guid: 900306b337bd56a45996475183427dcc,
         type: 3}
       propertyPath: m_Name
@@ -13124,6 +13142,12 @@ PrefabInstance:
       propertyPath: cooldown
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8221021774273073319, guid: 900306b337bd56a45996475183427dcc,
+        type: 3}
+      propertyPath: AbilityIcon
+      value: 
+      objectReference: {fileID: 697919745, guid: 9c5ce2ebdf751754a854f3bb2fd483c1,
+        type: 3}
     - target: {fileID: 8221021774273073319, guid: 900306b337bd56a45996475183427dcc,
         type: 3}
       propertyPath: tagertOption

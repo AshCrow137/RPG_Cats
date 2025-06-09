@@ -136,7 +136,7 @@ public class BasePlayerAbility : BaseAbility
     public GameObject SelectTarget()
     {
         GameObject newTarget = null;
-        if(tagertOption!=AbilityTargetingOptions.OneTarget)
+        if(tagertOption == AbilityTargetingOptions.Template || tagertOption == AbilityTargetingOptions.EveryEnemyWithinTemplate)
         {
             return abilityOwner.gameObject;
         }
