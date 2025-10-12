@@ -77,5 +77,11 @@ public class PlayerScript : CharacterScript
         }
         damageCoroutine = null;
     }
+
+    public void ChangeAbility(int newAbilityIndex, BasePlayerAbility ability)
+    {
+        abilityArray[newAbilityIndex] = ability;
+        GlobalEventManager.InvokePlayerAbilityChangedEvent(newAbilityIndex);
+    }
 }
 

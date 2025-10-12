@@ -10,11 +10,11 @@ public abstract class AI_FSMState
     }
     public virtual void Enter() 
     {
-        Debug.Log($"Enter {this} state");
+        //Debug.Log($"Enter {this} state");
     }
     public virtual void Exit()
     {
-        Debug.Log($"Exit {this} state");
+        //Debug.Log($"Exit {this} state");
     }
     public virtual void Update() { }
 }

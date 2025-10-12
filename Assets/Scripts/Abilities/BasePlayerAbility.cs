@@ -218,9 +218,9 @@ public enum EffectTypes
 {
     Move,
     Damage,
-    Summon,
+    //Summon,
     Buff,
-    Debuff
+    //Debuff
 
 }
 public enum OneTargetOptions

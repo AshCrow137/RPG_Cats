@@ -12,7 +12,7 @@ public class BaseAbility : MonoBehaviour
     protected bool hasTarget = true;
     [SerializeField,ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(hasTarget))]
     protected AbilityTargetingOptions tagertOption;
-    [SerializeField, ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(hasTarget))]
+    [SerializeField, ShowIf(ActionOnConditionFail.DontDraw, ConditionOperator.And, nameof(CheckIfOneTarget))]
     protected OneTargetOptions OneTargetOptions;
     [Header("ActivatedAbility parametres")]
     [SerializeField]
@@ -70,6 +70,11 @@ public class BaseAbility : MonoBehaviour
 
     protected Parameters ownerParameters;
 
+
+    public bool CheckIfOneTarget()
+    {
+        return tagertOption == AbilityTargetingOptions.OneTarget;
+    }
     #region UnityMethods
     protected virtual void Start()
     {
@@ -380,12 +385,12 @@ public class BaseAbility : MonoBehaviour
         Cooldown,
         Disabled
     }
-    protected enum AbilityExecutionType
+    public enum AbilityExecutionType
     {
         Instant,
         Continuous
     }
-    protected enum AbilityTargetingOptions
+    public enum AbilityTargetingOptions
     {
         OneTarget,
         EveryEnemyWithinTemplate,

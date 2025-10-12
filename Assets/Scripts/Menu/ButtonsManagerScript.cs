@@ -162,14 +162,14 @@ public class ButtonsManagerScript : MonoBehaviour
         int index = 0;
         foreach (GameObject abilityButton in abilityButtons)
         {
-            UpdateAbilityButtonGUI(abilityButton, index);
+            UpdateAbilityButtonGUI(index);
             index++;
 
         }
     }
-    private void UpdateAbilityButtonGUI(GameObject abilityButton,int index)
+    private void UpdateAbilityButtonGUI(int index)
     {
-
+        GameObject abilityButton = abilityButtons[index];
         Image ButtonAbilityImage = abilityButton.GetComponent<Image>();
         BasePlayerAbility ability = _abilities[index] as BasePlayerAbility;
         
